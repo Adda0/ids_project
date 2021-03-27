@@ -1,10 +1,8 @@
-drop table pavilon;
-drop table pozice;
-drop table zivocisny_druh;
-drop table jedinec;
-drop table mereni;
-
-
+drop table pavilon cascade constraints;
+drop table pozice cascade constraints;
+drop table zivocisny_druh cascade constraints;
+drop table jedinec cascade constraints;
+drop table mereni cascade constraints;
 
 
 create table pavilon (
