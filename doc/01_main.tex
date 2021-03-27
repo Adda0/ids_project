@@ -1,0 +1,60 @@
+%%%%% IDS | Semestrální projekt %%%% 
+%% Autor: David Chocohlatý (xchoch08), David Mihola (xmihol00)
+
+\documentclass[]{fitiel} % dokumenty v češtině, implicitní
+\pagestyle{plain}
+% implicitní cesta k obrázkům
+\graphicspath{{fig/}}
+
+%pagestyle settings
+\usepackage{fancyhdr}
+\usepackage[export]{adjustbox}
+\usepackage{pdflscape}
+\usepackage{rotating}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rfoot{Brno, \today}
+\lhead{Databázové systémy}
+\rhead{Zoologická zahrada}
+\lfoot{David Mihola (xmihol00) \\ David Chocholatý (xchoch08)}
+\cfoot{\thepage}
+
+% hlavička 
+
+\title{\logo\\ \huge{Databázové systémy} \\ 2021}
+\date{}
+
+
+\begin{document}
+	\maketitle
+\thispagestyle{empty}
+
+\begin{center}
+    \huge Projekt 1. část
+\end{center}
+\begin{center}
+    \huge Datový model (ERD), model případů užití (UCD)
+\end{center}
+\begin{center}
+    \huge \textbf{Zoologická zahrada}
+\end{center}
+\null
+\vfill
+    \LARGE{David Mihola (xmihol00)} \hspace*{\fill} \\
+    \LARGE{David Chocholatý (xchoch08)} \hspace*{\fill} \today
+
+    
+    
+    
+    
+
+\newpage
+
+%% vložení jednotlivých příkladů
+\input{02_zadani.tex}
+\input{03_UCD.tex} 
+\input{04_ERD.tex} 
+
+	
+\end{document}
