@@ -2,6 +2,7 @@ drop table pavilon;
 drop table pozice;
 drop table zivocisny_druh;
 drop table jedinec;
+drop table mereni;
 
 
 
@@ -47,3 +48,13 @@ create table jedinec (
         references pozice (id)
 );
 
+create table mereni (
+  id number(10) primary key,
+  id_jedince number(10) not null
+      references jedinec (id)
+      on delete cascade,
+  datum_mereni date,
+  zdravotni_stav varchar(1024),
+  hmotnost numeric(7, 2),
+  vyska numeric(7, 2)
+);
