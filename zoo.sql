@@ -3,7 +3,10 @@ drop table pozice cascade constraints;
 drop table zivocisny_druh cascade constraints;
 drop table jedinec cascade constraints;
 drop table mereni cascade constraints;
-
+drop table osoba cascade constraints;
+drop table zamestnanec cascade constraints;
+drop table navstevnik cascade constraints;
+drop table kvalifikace cascade constraints;
 
 create table pavilon (
     id varchar(10) primary key,
@@ -55,6 +58,69 @@ create table mereni (
   zdravotni_stav varchar(1024),
   hmotnost numeric(7, 2),
   vyska numeric(7, 2)
+);
+
+create table osoba (
+    rodne_cislo int(10) primary key --TODO typ
+    jmeno varchar(127)
+    adresa varchar(127)
+    email varchar(127)
+);
+
+create table zamestnanec (
+    rodne_cislo int(10) primary key
+    cislo_uctu varchar(63)
+    telefon varchar(16)
+    datum_nastupu date
+    plat money
+    nadrizeny int(10) default null
+    typ varchar(15) not null check (typ in('spravce', 'osetrovatel', 'udrzbar'))
+    foreign key (nadrizeny) references zamestnanec (id) default null -- nadrizeny
+    foreign key (id) references osoba (id) on delete cascade
+);
+
+create table navstevnik (
+    rodne_cislo int(10) primary key
+    zustatek money
+    platnost date
+    pocet_nastev int(4)
+    foreign key (id) references osoba (id) on delete cascade
+);
+
+create table kvalifikace (
+    kod_kvalifikace varchar(15) primary key
+);
+
+create table zamestnanec_kvalifikace (
+    zamestnanec_id int
+    kvalifikace_id int
+    foreign key (zamestnanec_id) references zamestnanec (id)
+    foreign key (kvalifikace_id) references kvalifikace (kod_kvalifikace)
+    unique (zamestnanec_id, kvalifikace_id)
+);
+
+create table osetrovatel_jedinec (
+    osetrovatel_id int
+    jedinec_id varchar(20)
+    foreign key (osetrovatel_id) references zamestnanec (id)
+    foreign key (jedinec_id) references jedinec (id)
+    unique (osetrovatel_id, jedinec_id)
+);
+
+create table osetrovatel_mereni (
+    osetrovatel_id int
+    mereni_id number(5)
+    foreign key (osetrovatel_id) references zamestnanec (id)
+    foreign key (mereni_id) references mereni (id)
+    unique (osetrovatel_id, mereni_id)
+);
+
+create table udrzbar_pozice (
+    udrzbar_id int
+    pozice_id varchar(20)
+    foreign key (udrzbar_id) references zamestnanec (id)
+    foreign key (pozice_id) references pozice (id)
+    unique (udrzbar_id, pozice_id)
 );
 
 -- insert 'pavilon' records
@@ -110,3 +176,59 @@ insert into mereni values (null, 'HOSK1043', DATE '2019-06-30', 'vše v pořádk
 insert into mereni values (null, 'HOSK1043', DATE '2019-08-12', 'nechuť k jídlu', 0.22, 1.19);
 insert into mereni values (null, 'HOSK1043', DATE '2019-11-30', 'nechuť k jídlu, špatné trávení', 0.20, 1.20);
 
+-- insert 'zamestnanec' records
+insert into osoba values (9910244245, 'David Mihola', 'Brno, 635 00', 'xmihol00@stud.fit.vutbr.cz');
+insert into zamestnanec values (9910244245, '8521473667/0800', '+420774826266', DATE '2018-07-21', 42000, null, 'spravce');
+insert into osoba values (8611067135, 'Marie Holá', 'Praha 1', 'holm@seznam.cz');
+insert into zamestnanec values (8611067135, '4632598711/0400', '+420888555222', DATE '2020-02-04', 26263, 9106077256, 'osetrovatel');
+insert into osoba values (9502233628, 'Jakub Beran', 'Znojmo 965 33', 'beran.jakub@google.cz');
+insert into zamestnanec values (9502233628, '9962473356/0600', '+420965243312', DATE '2019-09-26', 32850, 9910244245, 'udrzbar');
+insert into osoba values (9106077256, 'Vlasta Lajdová', 'Zlín, 168 36', 'vlajdova@volny.cz');
+insert into zamestnanec values (9106077256, '2274668512/0800', '+420776225841', DATE '2017-11-03', 34009, 9910244245, 'osetrovatel');
+insert into osoba values (7603242237, 'Pavel Okurka', 'Pardubice, 336 26', 'okurka@seznam.cz');
+insert into zamestnanec values (7603242237, '7726984413/0900', '+420603215547', DATE '2016-07-21', 23986, 9910244245, 'udrzbar');
+
+-- insert 'navstevnik' records
+insert into osoba values (7911155214, 'Petr Ponožka', 'Liberec, 264 02', 'p.p@centrum.cz');
+insert into navstevnik values (7911155214, 863, DATE '2021-09-13', 13);
+insert into osoba values (5601308565, 'Libuše Baledová', 'Ostrava, 523 41', 'ba.li@google.cz');
+insert into navstevnik values (5601308565, 65, DATE '2021-04-26', 8);
+insert into osoba values (0112056772, 'Barbora Hranolová', 'Kladno, 746 82', 'ba.li@google.cz');
+insert into navstevnik values (0112056772, 1366, DATE '2021-10-02', 16);
+
+-- insert 'kvalifikace' records
+insert into kvalifikace values ('OPRAVNENI_1');
+insert into kvalifikace values ('OSETROVATEL_1');
+insert into kvalifikace values ('OSETROVATEL_2');
+insert into kvalifikace values ('OSETROVATEL_3');
+insert into kvalifikace values ('UDRZBAR_1');
+insert into kvalifikace values ('UDRZBAR_2');
+insert into kvalifikace values ('UDRZBAR_3');
+
+-- insert 'zamestnanec_kvalifikace' records
+insert into zamestnanec_kvalifikace values (9910244245, 'OPRAVNENI_1');
+insert into zamestnanec_kvalifikace values (8611067135, 'UDRZBAR_1');
+insert into zamestnanec_kvalifikace values (8611067135, 'UDRZBAR_3');
+insert into zamestnanec_kvalifikace values (9502233628, 'OSETROVATEL_1');
+insert into zamestnanec_kvalifikace values (9502233628, 'OSETROVATEL_2');
+insert into zamestnanec_kvalifikace values (9502233628, 'OSETROVATEL_3');
+
+-- insert 'osetrovatel_jedinec' records
+insert into osetrovatel_jedinec values (9502233628, 'VLAR0001');
+insert into osetrovatel_jedinec values (9502233628, 'TYUS0050');
+insert into osetrovatel_jedinec values (9502233628, 'LEPU0458');
+insert into osetrovatel_jedinec values (9502233628, 'HOSK1043');
+insert into osetrovatel_jedinec values (9106077256, 'VLAR0002');
+insert into osetrovatel_jedinec values (9106077256, 'PLRU0003');
+insert into osetrovatel_jedinec values (9106077256, 'PLRU0004');
+insert into osetrovatel_jedinec values (9106077256, 'HOSK1489');
+
+-- insert 'osetrovatel_mereni' records
+insert into osetrovatel_mereni values (9502233628, null) --TODO
+
+-- insert 'udrzbar_pozice' records
+insert into udrzbar_pozice values (8611067135, 'KKO402D');
+insert into udrzbar_pozice values (8611067135, 'VME743A');
+insert into udrzbar_pozice values (7603242237, 'VLV075S');
+insert into udrzbar_pozice values (7603242237, 'KPT001M');
+insert into udrzbar_pozice values (7603242237, 'KTR123B');
