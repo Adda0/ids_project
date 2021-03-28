@@ -7,6 +7,10 @@ drop table osoba cascade constraints;
 drop table zamestnanec cascade constraints;
 drop table navstevnik cascade constraints;
 drop table kvalifikace cascade constraints;
+drop table zamestnanec_kvalifikace cascade constraints;
+drop table osetrovatel_jedinec cascade constraints;
+drop table osetrovatel_mereni cascade constraints;
+drop table udrzbar_pozice cascade constraints;
 
 create table pavilon (
     id varchar(10) primary key,
