@@ -68,7 +68,7 @@ create table osoba (
     rodne_cislo int(10) primary key,
     jmeno varchar(127),
     adresa varchar(127),
-    email varchar(127),
+    email varchar(127)
 );
 
 create table zamestnanec (
@@ -80,7 +80,7 @@ create table zamestnanec (
     nadrizeny int(10) default null,
     typ varchar(15) not null check (typ in('spravce', 'osetrovatel', 'udrzbar')),
     foreign key (nadrizeny) references zamestnanec (id) default null, -- nadrizeny
-    foreign key (id) references osoba (id) on delete cascade,
+    foreign key (id) references osoba (id) on delete cascade
 );
 
 create table navstevnik (
