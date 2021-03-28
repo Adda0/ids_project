@@ -65,66 +65,66 @@ create table mereni (
 );
 
 create table osoba (
-    rodne_cislo int(10) primary key --TODO typ
-    jmeno varchar(127)
-    adresa varchar(127)
-    email varchar(127)
+    rodne_cislo int(10) primary key,
+    jmeno varchar(127),
+    adresa varchar(127),
+    email varchar(127),
 );
 
 create table zamestnanec (
-    rodne_cislo int(10) primary key
-    cislo_uctu varchar(63)
-    telefon varchar(16)
-    datum_nastupu date
-    plat money
-    nadrizeny int(10) default null
-    typ varchar(15) not null check (typ in('spravce', 'osetrovatel', 'udrzbar'))
-    foreign key (nadrizeny) references zamestnanec (id) default null -- nadrizeny
-    foreign key (id) references osoba (id) on delete cascade
+    rodne_cislo int(10) primary key,
+    cislo_uctu varchar(63),
+    telefon varchar(16),
+    datum_nastupu date,
+    plat numeric(8, 2) default 0,
+    nadrizeny int(10) default null,
+    typ varchar(15) not null check (typ in('spravce', 'osetrovatel', 'udrzbar')),
+    foreign key (nadrizeny) references zamestnanec (id) default null, -- nadrizeny
+    foreign key (id) references osoba (id) on delete cascade,
 );
 
 create table navstevnik (
-    rodne_cislo int(10) primary key
-    zustatek money
-    platnost date
-    pocet_nastev int(4)
-    foreign key (id) references osoba (id) on delete cascade
+    rodne_cislo int(10) primary key,
+    zustatek numeric(8, 2) default 0,
+    platnost date,
+    pocet_nastev int(4),
+    foreign key (id) references osoba (id) on delete cascade,
 );
 
 create table kvalifikace (
-    kod_kvalifikace varchar(15) primary key
+    kod_kvalifikace varchar(15) primary key,
 );
 
 create table zamestnanec_kvalifikace (
-    zamestnanec_id int
-    kvalifikace_id int
-    foreign key (zamestnanec_id) references zamestnanec (id)
-    foreign key (kvalifikace_id) references kvalifikace (kod_kvalifikace)
-    unique (zamestnanec_id, kvalifikace_id)
+    zamestnanec_id int,
+    kvalifikace_id int,
+    foreign key (zamestnanec_id) references zamestnanec (id),
+    foreign key (kvalifikace_id) references kvalifikace (kod_kvalifikace),
+    unique (zamestnanec_id, kvalifikace_id),
 );
 
 create table osetrovatel_jedinec (
-    osetrovatel_id int
-    jedinec_id varchar(20)
-    foreign key (osetrovatel_id) references zamestnanec (id)
-    foreign key (jedinec_id) references jedinec (id)
-    unique (osetrovatel_id, jedinec_id)
+    osetrovatel_id int,
+    jedinec_id varchar(20),
+    foreign key (osetrovatel_id) references zamestnanec (id),
+    foreign key (jedinec_id) references jedinec (id),
+    unique (osetrovatel_id, jedinec_id),
 );
 
 create table osetrovatel_mereni (
-    osetrovatel_id int
-    mereni_id number(5)
-    foreign key (osetrovatel_id) references zamestnanec (id)
-    foreign key (mereni_id) references mereni (id)
-    unique (osetrovatel_id, mereni_id)
+    osetrovatel_id int,
+    mereni_id number(5),
+    foreign key (osetrovatel_id) references zamestnanec (id),
+    foreign key (mereni_id) references mereni (id),
+    unique (osetrovatel_id, mereni_id),
 );
 
 create table udrzbar_pozice (
-    udrzbar_id int
-    pozice_id varchar(20)
-    foreign key (udrzbar_id) references zamestnanec (id)
-    foreign key (pozice_id) references pozice (id)
-    unique (udrzbar_id, pozice_id)
+    udrzbar_id int,
+    pozice_id varchar(20),
+    foreign key (udrzbar_id) references zamestnanec (id),
+    foreign key (pozice_id) references pozice (id),
+    unique (udrzbar_id, pozice_id),
 );
 
 -- insert 'pavilon' records
@@ -228,7 +228,7 @@ insert into osetrovatel_jedinec values (9106077256, 'PLRU0004');
 insert into osetrovatel_jedinec values (9106077256, 'HOSK1489');
 
 -- insert 'osetrovatel_mereni' records
-insert into osetrovatel_mereni values (9502233628, null) --TODO
+insert into osetrovatel_mereni values (9502233628, null); --TODO
 
 -- insert 'udrzbar_pozice' records
 insert into udrzbar_pozice values (8611067135, 'KKO402D');
