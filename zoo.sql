@@ -88,11 +88,11 @@ create table navstevnik (
     zustatek numeric(8, 2) default 0,
     platnost date,
     pocet_nastev int(4),
-    foreign key (id) references osoba (id) on delete cascade,
+    foreign key (id) references osoba (id) on delete cascade
 );
 
 create table kvalifikace (
-    kod_kvalifikace varchar(15) primary key,
+    kod_kvalifikace varchar(15) primary key
 );
 
 create table zamestnanec_kvalifikace (
@@ -100,7 +100,7 @@ create table zamestnanec_kvalifikace (
     kvalifikace_id int,
     foreign key (zamestnanec_id) references zamestnanec (id),
     foreign key (kvalifikace_id) references kvalifikace (kod_kvalifikace),
-    unique (zamestnanec_id, kvalifikace_id),
+    unique (zamestnanec_id, kvalifikace_id)
 );
 
 create table osetrovatel_jedinec (
@@ -108,7 +108,7 @@ create table osetrovatel_jedinec (
     jedinec_id varchar(20),
     foreign key (osetrovatel_id) references zamestnanec (id),
     foreign key (jedinec_id) references jedinec (id),
-    unique (osetrovatel_id, jedinec_id),
+    unique (osetrovatel_id, jedinec_id)
 );
 
 create table osetrovatel_mereni (
@@ -116,7 +116,7 @@ create table osetrovatel_mereni (
     mereni_id number(5),
     foreign key (osetrovatel_id) references zamestnanec (id),
     foreign key (mereni_id) references mereni (id),
-    unique (osetrovatel_id, mereni_id),
+    unique (osetrovatel_id, mereni_id)
 );
 
 create table udrzbar_pozice (
@@ -124,7 +124,7 @@ create table udrzbar_pozice (
     pozice_id varchar(20),
     foreign key (udrzbar_id) references zamestnanec (id),
     foreign key (pozice_id) references pozice (id),
-    unique (udrzbar_id, pozice_id),
+    unique (udrzbar_id, pozice_id)
 );
 
 -- insert 'pavilon' records
@@ -193,12 +193,12 @@ insert into osoba values (7603242237, 'Pavel Okurka', 'Pardubice, 336 26', 'okur
 insert into zamestnanec values (7603242237, '7726984413/0900', '+420603215547', DATE '2016-07-21', 23986, 9910244245, 'udrzbar');
 
 -- insert 'navstevnik' records
-insert into osoba values (7911155214, 'Petr Ponožka', 'Liberec, 264 02', 'p.p@centrum.cz');
-insert into navstevnik values (7911155214, 863, DATE '2021-09-13', 13);
-insert into osoba values (5601308565, 'Libuše Baledová', 'Ostrava, 523 41', 'ba.li@google.cz');
-insert into navstevnik values (5601308565, 65, DATE '2021-04-26', 8);
-insert into osoba values (0112056772, 'Barbora Hranolová', 'Kladno, 746 82', 'ba.li@google.cz');
-insert into navstevnik values (0112056772, 1366, DATE '2021-10-02', 16);
+insert into osoba values (1, 'Petr Ponožka', 'Liberec, 264 02', 'p.p@centrum.cz');
+insert into navstevnik values (1, 863, DATE '2021-09-13', 13);
+insert into osoba values (2, 'Libuše Baledová', 'Ostrava, 523 41', 'ba.li@google.cz');
+insert into navstevnik values (2, 65, DATE '2021-04-26', 8);
+insert into osoba values (3, 'Barbora Hranolová', 'Kladno, 746 82', 'ba.li@google.cz');
+insert into navstevnik values (3, 1366, DATE '2021-10-02', 16);
 
 -- insert 'kvalifikace' records
 insert into kvalifikace values ('OPRAVNENI_1');
