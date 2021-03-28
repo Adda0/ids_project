@@ -3,7 +3,7 @@
 A simple SQL database for ZOO created for a [term project](https://www.fit.vutbr.cz/study/courses/ICP/public/.en) in the [ICP course](https://www.fit.vut.cz/study/course/13974/.en).
 
 ## Authors
-David Mihola (xmihol02) \
+David Mihola (xmihol00) \
 David Chocholatý (xchoch08)
 
 ## License
