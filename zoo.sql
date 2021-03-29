@@ -65,29 +65,31 @@ create table mereni (
 );
 
 create table osoba (
-    rodne_cislo int(10) primary key,
+    id int primary key,
     jmeno varchar(127),
     adresa varchar(127),
     email varchar(127)
 );
 
 create table zamestnanec (
-    rodne_cislo int(10) primary key,
+    rodne_cislo int primary key,
     cislo_uctu varchar(63),
+    -- constraint check_cislo_uctu check (REGEXP_LIKE (cislo_uctu, '^(([0-9]{0,6})-)?([0-9]{2,10})\/([0-9]{4})$')),
     telefon varchar(16),
     datum_nastupu date,
     plat numeric(8, 2) default 0,
-    nadrizeny int(10) default null,
-    typ varchar(15) not null check (typ in('spravce', 'osetrovatel', 'udrzbar')),
-    foreign key (nadrizeny) references zamestnanec (id) default null, -- nadrizeny
-    foreign key (id) references osoba (id) on delete cascade
+    nadrizeny int default 0,
+    typ varchar(15) not null,
+    constraint zamestnanec_typ check (typ in('spravce', 'osetrovatel', 'udrzbar')),
+    foreign key (nadrizeny) references zamestnanec (rodne_cislo),
+    foreign key (rodne_cislo) references osoba (id) on delete cascade
 );
 
 create table navstevnik (
-    rodne_cislo int(10) primary key,
+    id int primary key,
     zustatek numeric(8, 2) default 0,
     platnost date,
-    pocet_nastev int(4),
+    pocet_nastev int,
     foreign key (id) references osoba (id) on delete cascade
 );
 
@@ -97,34 +99,34 @@ create table kvalifikace (
 
 create table zamestnanec_kvalifikace (
     zamestnanec_id int,
-    kvalifikace_id int,
-    foreign key (zamestnanec_id) references zamestnanec (id),
+    kvalifikace_id varchar(15),
+    foreign key (zamestnanec_id) references zamestnanec (rodne_cislo),
     foreign key (kvalifikace_id) references kvalifikace (kod_kvalifikace),
-    unique (zamestnanec_id, kvalifikace_id)
+    constraint unique_zamestnanec_kvalifikace unique (zamestnanec_id, kvalifikace_id)
 );
 
 create table osetrovatel_jedinec (
     osetrovatel_id int,
     jedinec_id varchar(20),
-    foreign key (osetrovatel_id) references zamestnanec (id),
+    foreign key (osetrovatel_id) references zamestnanec (rodne_cislo),
     foreign key (jedinec_id) references jedinec (id),
-    unique (osetrovatel_id, jedinec_id)
+    constraint unique_osetrovatel_jednice unique (osetrovatel_id, jedinec_id)
 );
 
 create table osetrovatel_mereni (
     osetrovatel_id int,
     mereni_id number(5),
-    foreign key (osetrovatel_id) references zamestnanec (id),
+    foreign key (osetrovatel_id) references zamestnanec (rodne_cislo),
     foreign key (mereni_id) references mereni (id),
-    unique (osetrovatel_id, mereni_id)
+    constraint unique_osetrovatel_mereni unique (osetrovatel_id, mereni_id)
 );
 
 create table udrzbar_pozice (
     udrzbar_id int,
     pozice_id varchar(20),
-    foreign key (udrzbar_id) references zamestnanec (id),
+    foreign key (udrzbar_id) references zamestnanec (rodne_cislo),
     foreign key (pozice_id) references pozice (id),
-    unique (udrzbar_id, pozice_id)
+    constraint unique_udrzbar_pozice unique (udrzbar_id, pozice_id)
 );
 
 -- insert 'pavilon' records
@@ -183,14 +185,14 @@ insert into mereni values (null, 'HOSK1043', DATE '2019-11-30', 'nechuť k jídl
 -- insert 'zamestnanec' records
 insert into osoba values (9910244245, 'David Mihola', 'Brno, 635 00', 'xmihol00@stud.fit.vutbr.cz');
 insert into zamestnanec values (9910244245, '8521473667/0800', '+420774826266', DATE '2018-07-21', 42000, null, 'spravce');
-insert into osoba values (8611067135, 'Marie Holá', 'Praha 1', 'holm@seznam.cz');
-insert into zamestnanec values (8611067135, '4632598711/0400', '+420888555222', DATE '2020-02-04', 26263, 9106077256, 'osetrovatel');
 insert into osoba values (9502233628, 'Jakub Beran', 'Znojmo 965 33', 'beran.jakub@google.cz');
 insert into zamestnanec values (9502233628, '9962473356/0600', '+420965243312', DATE '2019-09-26', 32850, 9910244245, 'udrzbar');
 insert into osoba values (9106077256, 'Vlasta Lajdová', 'Zlín, 168 36', 'vlajdova@volny.cz');
 insert into zamestnanec values (9106077256, '2274668512/0800', '+420776225841', DATE '2017-11-03', 34009, 9910244245, 'osetrovatel');
 insert into osoba values (7603242237, 'Pavel Okurka', 'Pardubice, 336 26', 'okurka@seznam.cz');
 insert into zamestnanec values (7603242237, '7726984413/0900', '+420603215547', DATE '2016-07-21', 23986, 9910244245, 'udrzbar');
+insert into osoba values (8611067135, 'Marie Holá', 'Praha 1', 'holm@seznam.cz');
+insert into zamestnanec values (8611067135, '4632598711/0400', '+420888555222', DATE '2020-02-04', 26263, 9106077256, 'osetrovatel');
 
 -- insert 'navstevnik' records
 insert into osoba values (1, 'Petr Ponožka', 'Liberec, 264 02', 'p.p@centrum.cz');
