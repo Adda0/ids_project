@@ -70,19 +70,20 @@ create table osoba (
     adresa varchar(127),
     email varchar(127)
 );
+-- constraint check_id check ((regexp_like (rc, '^[0-9]{10}$')) or ((regexp_like (rc, '^[0-9]{9}(?<!000)$')))),
 
 create table zamestnanec (
-    rodne_cislo int primary key,
-    cislo_uctu varchar(63),
-    -- constraint check_cislo_uctu check (REGEXP_LIKE (cislo_uctu, '^(([0-9]{0,6})-)?([0-9]{2,10})\/([0-9]{4})$')),
+    id int primary key,
+    cislo_uctu varchar(20),
+    constraint check_cislo_uctu check (regexp_like (cislo_uctu, '^(([0-9]{0,6})-)?([0-9]{2,10})\/([0-9]{4})$')),
     telefon varchar(16),
     datum_nastupu date,
     plat numeric(8, 2) default 0,
     nadrizeny int default 0,
     typ varchar(15) not null,
     constraint zamestnanec_typ check (typ in('spravce', 'osetrovatel', 'udrzbar')),
-    foreign key (nadrizeny) references zamestnanec (rodne_cislo),
-    foreign key (rodne_cislo) references osoba (id) on delete cascade
+    foreign key (nadrizeny) references zamestnanec (id),
+    foreign key (id) references osoba (id) on delete cascade
 );
 
 create table navstevnik (
@@ -100,7 +101,7 @@ create table kvalifikace (
 create table zamestnanec_kvalifikace (
     zamestnanec_id int,
     kvalifikace_id varchar(15),
-    foreign key (zamestnanec_id) references zamestnanec (rodne_cislo),
+    foreign key (zamestnanec_id) references zamestnanec (id),
     foreign key (kvalifikace_id) references kvalifikace (kod_kvalifikace),
     constraint unique_zamestnanec_kvalifikace unique (zamestnanec_id, kvalifikace_id)
 );
@@ -108,7 +109,7 @@ create table zamestnanec_kvalifikace (
 create table osetrovatel_jedinec (
     osetrovatel_id int,
     jedinec_id varchar(20),
-    foreign key (osetrovatel_id) references zamestnanec (rodne_cislo),
+    foreign key (osetrovatel_id) references zamestnanec (id),
     foreign key (jedinec_id) references jedinec (id),
     constraint unique_osetrovatel_jednice unique (osetrovatel_id, jedinec_id)
 );
@@ -116,7 +117,7 @@ create table osetrovatel_jedinec (
 create table osetrovatel_mereni (
     osetrovatel_id int,
     mereni_id number(5),
-    foreign key (osetrovatel_id) references zamestnanec (rodne_cislo),
+    foreign key (osetrovatel_id) references zamestnanec (id),
     foreign key (mereni_id) references mereni (id),
     constraint unique_osetrovatel_mereni unique (osetrovatel_id, mereni_id)
 );
@@ -124,7 +125,7 @@ create table osetrovatel_mereni (
 create table udrzbar_pozice (
     udrzbar_id int,
     pozice_id varchar(20),
-    foreign key (udrzbar_id) references zamestnanec (rodne_cislo),
+    foreign key (udrzbar_id) references zamestnanec (id),
     foreign key (pozice_id) references pozice (id),
     constraint unique_udrzbar_pozice unique (udrzbar_id, pozice_id)
 );
