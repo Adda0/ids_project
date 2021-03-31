@@ -21,17 +21,21 @@ create table pozice (
     id varchar(20) primary key,
     prostredi varchar(30),
     datum_udrzby date,
-    typ varchar(30),
+    typ varchar(30) not null,
+    constraint typ_list check ( typ in ('výběh', 'klec', 'terárium', 'akvárium')),
     --
-    -- specification | vybeh:
+    -- specification | výběh:
     plocha numeric(7, 2) default null,
     --
-    -- specification | klec:
+    -- specification | klec, terárium, akvárium:
     objem numeric(7, 2) default null,
     pavilon varchar(10) default null,
     foreign key (pavilon)
         references pavilon (id)
-        on delete cascade
+        on delete cascade,
+    -- check 'výběh' XOR ('klec' OR 'terárium' OR 'akvárium')
+    constraint typ_unique check ((typ='výběh' and plocha is not null and objem is null and pavilon is null) or
+        (typ<>'výběh' and objem is not null and plocha is null))
 );
 
 create table zivocisny_druh (
@@ -41,7 +45,7 @@ create table zivocisny_druh (
 
 create table jedinec (
     id varchar(20) primary key,
-    jmeno varchar(30),
+    jmeno varchar(30) default null,
     datum_narozeni date not null,
     datum_umrti date default null,
     zastupce_druhu varchar(30) not null,
@@ -58,10 +62,10 @@ create table mereni (
   id_jedince varchar(20) not null
       references jedinec (id)
       on delete cascade,
-  datum_mereni date,
-  zdravotni_stav varchar(1024),
-  hmotnost numeric(7, 2),
-  vyska numeric(7, 2)
+  datum_mereni date not null,
+  zdravotni_stav varchar(1024) not null,
+  hmotnost numeric(7, 2) not null,
+  vyska numeric(7, 2) not null
 );
 
 create table osoba (
@@ -138,11 +142,26 @@ insert into pavilon values ('TR058R', 'tropický');
 insert into pavilon values ('KO174H', 'kočky');
 
 -- insert 'pozice' records
-insert into pozice values ('KPT001M', 'Madagaskar', DATE '2005-05-10', 'klec', null, 50, 'PT012A');
-insert into pozice values ('KKO402D', 'Asie', DATE '2010-04-26', 'klec', null, 30, 'KO174H');
-insert into pozice values ('KTR123B', 'Brazílie', DATE '2002-05-30', 'klec', null, 25, 'TR058R');
-insert into pozice values ('VLV075S', 'savana', DATE '2017-10-08', 'vybeh', 460, null, null);
-insert into pozice values ('VME743A', 'arktický', DATE '2021-04-15', 'vybeh', 320, null, null);
+insert into pozice (id, prostredi, datum_udrzby, typ, objem, pavilon)
+    values ('KPT001M', 'Madagaskar', DATE '2005-05-10', 'klec', 50, 'PT012A');
+insert into pozice (id, prostredi, datum_udrzby, typ, objem, pavilon)
+    values ('ARY141R', 'Amazonka', DATE '2023-09-24', 'akvárium', 10, 'RY100G');
+insert into pozice (id, prostredi, datum_udrzby, typ, objem, pavilon)
+    values ('TPL666E', 'Amazonka', DATE '2007-05-14', 'terárium', 4, 'PL102B');
+insert into pozice (id, prostredi, datum_udrzby, typ, objem, pavilon)
+    values ('Ann006K', 'Oceán', DATE '2007-05-14', 'akvárium', 6, 'RY100G');
+insert into pozice (id, prostredi, datum_udrzby, typ, objem, pavilon)
+    values ('KPT026N', 'Oceán', DATE '2007-05-14', 'klec', 12, null);
+insert into pozice (id, prostredi, datum_udrzby, typ, objem, pavilon)
+    values ('KKO402D', 'Asie', DATE '2010-04-26', 'klec', 30, 'KO174H');
+insert into pozice (id, prostredi, datum_udrzby, typ, objem, pavilon)
+    values ('KTR123B', 'Brazílie', DATE '2002-05-30', 'klec', 25, 'TR058R');
+insert into pozice (id, prostredi, datum_udrzby, typ, plocha)
+    values ('VLV075S', 'savana', DATE '2017-10-08', 'výběh', 460);
+insert into pozice (id, prostredi, datum_udrzby, typ, plocha)
+    values ('VME743A', 'arktický', DATE '2021-04-15', 'výběh', 320);
+insert into pozice (id, prostredi, datum_udrzby, typ, plocha)
+    values ('aVME743A', 'arktický', DATE '2021-04-15', 'výběh', 320);
 
 -- insert 'zivocisny_druh' records
 insert into zivocisny_druh values ('lev pustinný', 'Lev je po tygrovi druhá největší kočkovitá šelma. U lvů se projevuje výrazný pohlavní dimorfismus, hlavním a určujícím rysem lvích samců je jejich hříva. Samci váží 150–250 kg a samice 90–165 kg. V divočině se lvi dožívají 10–14 let, kdežto v zajetí se mohou dožít i věku 20 let. Dříve se lvi vyskytovali v celé Africe, ve velké části Asie, v Evropě a dokonce i v Americe, dnes se vyskytují pouze v Africe a v nevelké části Indie. Jsou to společenská zvířata a loví ve smečkách. Jejich nejčastější kořistí jsou velcí savci, především kopytníci. Mezinárodní svaz ochrany přírody hodnotí lva jako zranitelný druh.');
@@ -155,6 +174,14 @@ insert into zivocisny_druh values ('perlička kropenatá', 'Dorůstá 53–63 cm
 Výzkum mechaniky pohybu tohoto ptáka a vlivu jeho chůze na substrát ukázal, že podobným způsobem se v období druhohor pohybovali také teropodní dinosauři.');
 
 insert into zivocisny_druh values ('vlk arktický', 'Vlk arktický je poddruh vlka obecného, který žije na kanadském severu, především na Ostrovech královny Alžběty, kde teplota klesá až pod -50 °C. Délka těla samce je 90−150 cm, samice 90−120 cm, váží od 40 do 60 kg. Druh je pohlavně dimorfní, samec je výrazně větší a těžší nežli samice.');
+
+insert into zivocisny_druh values ('rejnok ostnatý', 'Hřbetní strana je hnědošedá v různých odstínech, s tmavými skvrnami a světlými tečkami. Břišní strana těla je světle šedá. Hrudní ploutve se táhnou od rypce po obou stranách těla až k ocasu. Samičky i samci mají na hřbetě trny. Žije na dně moří s lehce písčitým až bahnitým dnem od 20 metrů hloubky. Lze se s nimi setkat na mělčinách a v ústí řek. ');
+insert into zivocisny_druh values ('máčka skvrnitá', 'Je malý druh žraloka z čeledi máčkovitých vyskytující se na Zemi od mezozoika, který je rozšířen v severovýchodním Atlantiku včetně Středozemního moře, kde je občas pozorován rekreačními potápěči. Jedná se o druh žraloka, který není člověku nikterak nebezpečný. Živí se drobnými mořskými živočichy, které loví převážně v noci u mořského dna.');
+
+insert into zivocisny_druh values ('ara arakanga', 'Je pestře zbarvený papoušek z rodu Ara. Ve volné přírodě žije v Mexiku, Střední Americe a na severu Jižní Ameriky po Brazílii. Jeho přirozeným biotopem jsou tropické deštné lesy, savany a plantáže.');
+insert into zivocisny_druh values ('albatros stěhovavý', 'Je velký mořský pták z čeledi albatrosovití. Vyskytuje se na všech oceánech jižní polokoule. Albatros stěhovavý má poměrně velkou hlavu a dlouhý silný zobák. Tento druh má největší rozpětí křídel ze všech současných ptáků, v průměru kolem 3,1 m. Největší ověřené rozpětí křídel přitom činí 3,63 m. Větším rozpětím křídel disponovali pouze někteří vyhynulí ptáci, jako byl argentinský miocénní druh Argentavis magnificens, jehož rozpětí činilo až přes 6 metrů a hmotnost přes 70 kilogramů. Díky svým obrovským křídlům může albatros stěhovavý trávit dlouhé hodiny ve vzduchu. Při plachtění bez mávání křídel využívá klouzavosti až 27. Za den může nalétat až tisíc kilometrů.');
+
+insert into zivocisny_druh values ('anakonda velká', 'je velký had z čeledi hroznýšovitých. Žije v tropických a subtropických oblastech Jižní Ameriky. Je přizpůsobena dlouhodobému pobytu ve vodním prostředí. Dosahuje nejčastěji délky 2,5 až 5 metrů, obzvláště velcí jedinci měří 5 až 6 metrů, přičemž se předpokládá, že ve výjimečných případech a za vhodných podmínek může dorůst až k 7 metrům. Zprávy o devítimetrových, desetimetrových či dokonce ještě delších jedincích nejsou považovány za věrohodné. Jelikož je robustně stavěná, jedná se o nejtěžšího hada světa, dosahuje hmotnosti i více než 100 kg. Ačkoliv je anakonda velmi populární jak mezi herpetology tak i laiky, o jejím životě se ví relativně málo informací. Živí se rozličnými živočichy až do velikosti kajmana či dospělé kapybary, které zabíjí udušením ve smyčkách svého těla.');
 
 -- insert 'jedinec' records
 insert into jedinec values ('VLAR0001', 'Felix', DATE '2017-03-14', null, 'vlk arktický', 'VME743A');
@@ -170,18 +197,36 @@ insert into jedinec values ('HOSK1043', 'Petroslav', DATE '2019-05-24', DATE '20
 insert into jedinec values ('HOSK1380', 'Petra', DATE '2020-08-14', null, 'holub skalní', 'KTR123B');
 insert into jedinec values ('HOSK1489', 'Petr', DATE '2020-09-04', null, 'holub skalní', 'KTR123B');
 
+insert into jedinec values ('REOS044', 'Mak', DATE '2018-09-01', DATE '2020-10-17', 'rejnok ostnatý', null);
+insert into jedinec values ('REOS045', 'Boko', DATE '2018-09-04', null, 'rejnok ostnatý', 'Ann006K');
+
+insert into jedinec values ('MASK002', 'Macko', DATE '2019-06-30', null, 'máčka skvrnitá', 'Ann006K');
+
+insert into jedinec values ('ARAR001', 'Petr', DATE '2020-06-15', null, 'ara arakanga', 'KTR123B');
+insert into jedinec values ('ALST421', 'Petr', DATE '2019-07-24', null, 'albatros stěhovavý', 'KPT026N');
+insert into jedinec values ('ALST422', 'Anna', DATE '2019-08-25', null, 'albatros stěhovavý', 'KPT026N');
+
+insert into jedinec values ('ANVE015', 'Anaka', DATE '2018-11-10', null, 'anakonda velká', 'TPL666E');
 
 -- insert 'mereni' records
-insert into mereni values (null, 'VLAR0001', DATE '2019-12-30', 'vše v pořádku', 50.84, 1.20);
-insert into mereni values (null, 'VLAR0001', DATE '2020-04-12', 'línající srst', 49.42, 1.25);
-insert into mereni values (null, 'VLAR0001', DATE '2019-12-30', 'línající srst, poškozené oko', 47.30, 1.30);
+insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
+    values ('VLAR0001', DATE '2019-12-30', 'vše v pořádku', 50.84, 1.20);
+insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
+    values ('VLAR0001', DATE '2020-04-12', 'línající srst', 49.42, 1.25);
+insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
+    values ('VLAR0001', DATE '2019-12-30', 'línající srst, poškozené oko', 47.30, 1.30);
 
-insert into mereni values (null, 'HOSK1489', DATE '2021-01-01', 'vše v pořádku', 0.32, 0.16);
-insert into mereni values (null, 'HOSK1489', DATE '2021-03-01', 'vše v pořádku', 0.35, 0.19);
+insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
+    values ('HOSK1489', DATE '2021-01-01', 'vše v pořádku', 0.32, 0.16);
+insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
+    values ('HOSK1489', DATE '2021-03-01', 'vše v pořádku', 0.35, 0.19);
 
-insert into mereni values (null, 'HOSK1043', DATE '2019-06-30', 'vše v pořádku', 0.30, 1.20);
-insert into mereni values (null, 'HOSK1043', DATE '2019-08-12', 'nechuť k jídlu', 0.22, 1.19);
-insert into mereni values (null, 'HOSK1043', DATE '2019-11-30', 'nechuť k jídlu, špatné trávení', 0.20, 1.20);
+insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
+    values ('HOSK1043', DATE '2019-06-30', 'vše v pořádku', 0.30, 1.20);
+insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
+    values ('HOSK1043', DATE '2019-08-12', 'nechuť k jídlu', 0.22, 1.19);
+insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
+    values ('HOSK1043', DATE '2019-11-30', 'nechuť k jídlu, špatné trávení', 0.20, 1.20);
 
 -- insert 'zamestnanec' records
 insert into osoba values (9910244245, 'David Mihola', 'Brno, 635 00', 'xmihol00@stud.fit.vutbr.cz');
