@@ -239,14 +239,20 @@ insert into osoba values (7603242237, 'Pavel Okurka', 'Pardubice, 336 26', 'okur
 insert into zamestnanec values (7603242237, '7726984413/0900', '+420603215547', DATE '2016-07-21', 23986, 9910244245, 'udrzbar');
 insert into osoba values (8611067135, 'Marie Holá', 'Praha 1', 'holm@seznam.cz');
 insert into zamestnanec values (8611067135, '4632598711/0400', '+420888555222', DATE '2020-02-04', 26263, 9106077256, 'osetrovatel');
+insert into osoba values (7663214164, 'Jaroslava Mladá', 'Znojmo 412 01', 'mlada.jaroslava@centrum.cz');
+insert into zamestnanec values (7663214164, '5638169742/0102', '+420556412874', DATE '2014-11-10', 31270, 9106077256, 'osetrovatel');
+insert into osoba values (9611251334, 'Milan Lander', 'Jihlava 512 34', 'milander@seznam.cz');
+insert into zamestnanec values (9611251334, '1126648792/0700', '+420135879624', DATE '2018-02-03', 28762, 9502233628, 'udrzbar');
 
 -- insert 'navstevnik' records
 insert into osoba values (1, 'Petr Ponožka', 'Liberec, 264 02', 'p.p@centrum.cz');
 insert into navstevnik values (1, 863, DATE '2021-09-13', 13);
 insert into osoba values (2, 'Libuše Baledová', 'Ostrava, 523 41', 'ba.li@google.cz');
 insert into navstevnik values (2, 65, DATE '2021-04-26', 8);
-insert into osoba values (3, 'Barbora Hranolová', 'Kladno, 746 82', 'ba.li@google.cz');
+insert into osoba values (3, 'Barbora Hranolová', 'Kladno, 746 82', 'hranolka@google.cz');
 insert into navstevnik values (3, 1366, DATE '2021-10-02', 16);
+insert into osoba values (4, 'Marek Brambora', 'Plzeň, 234 11', 'bramboram@volny.cz');
+insert into navstevnik values (4, 733, DATE '2021-08-26', 12);
 
 -- insert 'kvalifikace' records
 insert into kvalifikace values ('OPRAVNENI_1');
@@ -259,21 +265,34 @@ insert into kvalifikace values ('UDRZBAR_3');
 
 -- insert 'zamestnanec_kvalifikace' records
 insert into zamestnanec_kvalifikace values (9910244245, 'OPRAVNENI_1');
-insert into zamestnanec_kvalifikace values (8611067135, 'UDRZBAR_1');
-insert into zamestnanec_kvalifikace values (8611067135, 'UDRZBAR_3');
-insert into zamestnanec_kvalifikace values (9502233628, 'OSETROVATEL_1');
-insert into zamestnanec_kvalifikace values (9502233628, 'OSETROVATEL_2');
-insert into zamestnanec_kvalifikace values (9502233628, 'OSETROVATEL_3');
+insert into zamestnanec_kvalifikace values (9502233628, 'UDRZBAR_1');
+insert into zamestnanec_kvalifikace values (9502233628, 'UDRZBAR_2');
+insert into zamestnanec_kvalifikace values (9502233628, 'UDRZBAR_3');
+insert into zamestnanec_kvalifikace values (9106077256, 'OSETROVATEL_1');
+insert into zamestnanec_kvalifikace values (9106077256, 'OSETROVATEL_2');
+insert into zamestnanec_kvalifikace values (9106077256, 'OSETROVATEL_3');
+insert into zamestnanec_kvalifikace values (8611067135, 'OSETROVATEL_1');
+insert into zamestnanec_kvalifikace values (7663214164, 'OSETROVATEL_1');
+insert into zamestnanec_kvalifikace values (7663214164, 'OSETROVATEL_2');
+insert into zamestnanec_kvalifikace values (7603242237, 'UDRZBAR_1');
+insert into zamestnanec_kvalifikace values (7603242237, 'UDRZBAR_2');
 
 -- insert 'osetrovatel_jedinec' records
-insert into osetrovatel_jedinec values (9502233628, 'VLAR0001');
-insert into osetrovatel_jedinec values (9502233628, 'TYUS0050');
-insert into osetrovatel_jedinec values (9502233628, 'LEPU0458');
-insert into osetrovatel_jedinec values (9502233628, 'HOSK1043');
+insert into osetrovatel_jedinec values (8611067135, 'VLAR0001');
+insert into osetrovatel_jedinec values (8611067135, 'TYUS0050');
+insert into osetrovatel_jedinec values (8611067135, 'LEPU0458');
+insert into osetrovatel_jedinec values (8611067135, 'HOSK1043');
+insert into osetrovatel_jedinec values (8611067135, 'REOS044');
+insert into osetrovatel_jedinec values (8611067135, 'ANVE015');
 insert into osetrovatel_jedinec values (9106077256, 'VLAR0002');
 insert into osetrovatel_jedinec values (9106077256, 'PLRU0003');
 insert into osetrovatel_jedinec values (9106077256, 'PLRU0004');
 insert into osetrovatel_jedinec values (9106077256, 'HOSK1489');
+insert into osetrovatel_jedinec values (9106077256, 'ANVE015');
+insert into osetrovatel_jedinec values (7663214164, 'REOS044');
+insert into osetrovatel_jedinec values (7663214164, 'ARAR001');
+insert into osetrovatel_jedinec values (7663214164, 'ALST421');
+insert into osetrovatel_jedinec values (7663214164, 'ALST422');
 
 -- insert 'osetrovatel_mereni' records
 insert into osetrovatel_mereni values (9502233628, null); --TODO
@@ -284,3 +303,7 @@ insert into udrzbar_pozice values (8611067135, 'VME743A');
 insert into udrzbar_pozice values (7603242237, 'VLV075S');
 insert into udrzbar_pozice values (7603242237, 'KPT001M');
 insert into udrzbar_pozice values (7603242237, 'KTR123B');
+insert into udrzbar_pozice values (9611251334, 'VME743A');
+insert into udrzbar_pozice values (9611251334, 'VLV075S');
+insert into udrzbar_pozice values (9611251334, 'KTR123B');
+insert into udrzbar_pozice values (9611251334, 'KPT001M');
