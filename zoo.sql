@@ -275,6 +275,17 @@ insert into osetrovatel_jedinec values (7663214164, 'ARAR001');
 insert into osetrovatel_jedinec values (7663214164, 'ALST421');
 insert into osetrovatel_jedinec values (7663214164, 'ALST422');
 
+-- insert 'udrzbar_pozice' records
+insert into udrzbar_pozice values (9502233628, 'KKO402D');
+insert into udrzbar_pozice values (9502233628, 'VME743A');
+insert into udrzbar_pozice values (7603242237, 'VLV075S');
+insert into udrzbar_pozice values (7603242237, 'KPT001M');
+insert into udrzbar_pozice values (7603242237, 'KTR123B');
+insert into udrzbar_pozice values (9611251334, 'VME743A');
+insert into udrzbar_pozice values (9611251334, 'VLV075S');
+insert into udrzbar_pozice values (9611251334, 'KTR123B');
+insert into udrzbar_pozice values (9611251334, 'KPT001M');
+
 -- insert 'mereni' and 'osetrovatel_mereni' records
 DECLARE
     type mereni_record_t is record (
@@ -319,13 +330,3 @@ BEGIN
     insert into osetrovatel_mereni values (9106077256, mereni_record.id_jedince, mereni_record.id);
 END;
 
--- insert 'udrzbar_pozice' records
-insert into udrzbar_pozice values (8611067135, 'KKO402D');
-insert into udrzbar_pozice values (8611067135, 'VME743A');
-insert into udrzbar_pozice values (7603242237, 'VLV075S');
-insert into udrzbar_pozice values (7603242237, 'KPT001M');
-insert into udrzbar_pozice values (7603242237, 'KTR123B');
-insert into udrzbar_pozice values (9611251334, 'VME743A');
-insert into udrzbar_pozice values (9611251334, 'VLV075S');
-insert into udrzbar_pozice values (9611251334, 'KTR123B');
-insert into udrzbar_pozice values (9611251334, 'KPT001M');
