@@ -75,7 +75,6 @@ create table osoba (
     adresa varchar(127),
     email varchar(127)
 );
--- constraint check_id check ((regexp_like (rc, '^[0-9]{10}$')) or ((regexp_like (rc, '^[0-9]{9}(?<!000)$')))),
 
 create table zamestnanec (
     id int primary key,
