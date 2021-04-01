@@ -75,7 +75,6 @@ create table osoba (
     adresa varchar(127),
     email varchar(127)
 );
--- constraint check_id check ((regexp_like (rc, '^[0-9]{10}$')) or ((regexp_like (rc, '^[0-9]{9}(?<!000)$')))),
 
 create table zamestnanec (
     id int primary key,
@@ -276,6 +275,17 @@ insert into osetrovatel_jedinec values (7663214164, 'ARAR001');
 insert into osetrovatel_jedinec values (7663214164, 'ALST421');
 insert into osetrovatel_jedinec values (7663214164, 'ALST422');
 
+-- insert 'udrzbar_pozice' records
+insert into udrzbar_pozice values (9502233628, 'KKO402D');
+insert into udrzbar_pozice values (9502233628, 'VME743A');
+insert into udrzbar_pozice values (7603242237, 'VLV075S');
+insert into udrzbar_pozice values (7603242237, 'KPT001M');
+insert into udrzbar_pozice values (7603242237, 'KTR123B');
+insert into udrzbar_pozice values (9611251334, 'VME743A');
+insert into udrzbar_pozice values (9611251334, 'VLV075S');
+insert into udrzbar_pozice values (9611251334, 'KTR123B');
+insert into udrzbar_pozice values (9611251334, 'KPT001M');
+
 -- insert 'mereni' and 'osetrovatel_mereni' records
 DECLARE
     type mereni_record_t is record (
@@ -292,7 +302,7 @@ BEGIN
     insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
         values ('HOSK1043', DATE '2019-08-12', 'nechuť k jídlu', 0.22, 1.19)
         returning id_jedince, id into mereni_record;
-    insert into osetrovatel_mereni values (9502233628, mereni_record.id_jedince, mereni_record.id);
+    insert into osetrovatel_mereni values (9106077256, mereni_record.id_jedince, mereni_record.id);
 
     insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
         values ('HOSK1043', DATE '2019-11-30', 'nechuť k jídlu, špatné trávení', 0.20, 1.20)
@@ -320,13 +330,3 @@ BEGIN
     insert into osetrovatel_mereni values (9106077256, mereni_record.id_jedince, mereni_record.id);
 END;
 
--- insert 'udrzbar_pozice' records
-insert into udrzbar_pozice values (8611067135, 'KKO402D');
-insert into udrzbar_pozice values (8611067135, 'VME743A');
-insert into udrzbar_pozice values (7603242237, 'VLV075S');
-insert into udrzbar_pozice values (7603242237, 'KPT001M');
-insert into udrzbar_pozice values (7603242237, 'KTR123B');
-insert into udrzbar_pozice values (9611251334, 'VME743A');
-insert into udrzbar_pozice values (9611251334, 'VLV075S');
-insert into udrzbar_pozice values (9611251334, 'KTR123B');
-insert into udrzbar_pozice values (9611251334, 'KPT001M');
