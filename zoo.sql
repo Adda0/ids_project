@@ -257,6 +257,7 @@ insert into osetrovatel_jedinec values (9106077256, 'PLRU0003');
 insert into osetrovatel_jedinec values (9106077256, 'PLRU0004');
 insert into osetrovatel_jedinec values (9106077256, 'HOSK1489');
 
+-- insert 'mereni' and 'osetrovatel_mereni' records
 DECLARE
     type mereni_record_t is record (
         id_jedince mereni.id_jedince%TYPE,
@@ -265,29 +266,40 @@ DECLARE
     mereni_record mereni_record_t;
 BEGIN
     insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
+        values ('HOSK1043', DATE '2019-06-30', 'vše v pořádku', 0.30, 1.20)
+        returning id_jedince, id into mereni_record;
+    insert into osetrovatel_mereni values (9502233628, mereni_record.id_jedince, mereni_record.id);
+
+    insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
+        values ('HOSK1043', DATE '2019-08-12', 'nechuť k jídlu', 0.22, 1.19)
+        returning id_jedince, id into mereni_record;
+    insert into osetrovatel_mereni values (9502233628, mereni_record.id_jedince, mereni_record.id);
+
+    insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
         values ('HOSK1043', DATE '2019-11-30', 'nechuť k jídlu, špatné trávení', 0.20, 1.20)
         returning id_jedince, id into mereni_record;
     insert into osetrovatel_mereni values (9502233628, mereni_record.id_jedince, mereni_record.id);
+
+    insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
+        values ('VLAR0001', DATE '2020-04-12', 'línající srst', 49.42, 1.25)
+        returning id_jedince, id into mereni_record;
+    insert into osetrovatel_mereni values (9502233628, mereni_record.id_jedince, mereni_record.id);
+
+    insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
+        values ('VLAR0001', DATE '2019-12-30', 'línající srst, poškozené oko', 47.30, 1.30)
+        returning id_jedince, id into mereni_record;
+    insert into osetrovatel_mereni values (9502233628, mereni_record.id_jedince, mereni_record.id);
+
+    insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
+        values ('HOSK1489', DATE '2021-01-01', 'vše v pořádku', 0.32, 0.16)
+        returning id_jedince, id into mereni_record;
+    insert into osetrovatel_mereni values (9106077256, mereni_record.id_jedince, mereni_record.id);
+
+    insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
+        values ('HOSK1489', DATE '2021-03-01', 'vše v pořádku', 0.35, 0.19)
+        returning id_jedince, id into mereni_record;
+    insert into osetrovatel_mereni values (9106077256, mereni_record.id_jedince, mereni_record.id);
 END;
-
--- insert 'mereni' records
-
-insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
-    values ('VLAR0001', DATE '2020-04-12', 'línající srst', 49.42, 1.25);
-insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
-    values ('VLAR0001', DATE '2019-12-30', 'línající srst, poškozené oko', 47.30, 1.30);
-
-insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
-    values ('HOSK1489', DATE '2021-01-01', 'vše v pořádku', 0.32, 0.16);
-insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
-    values ('HOSK1489', DATE '2021-03-01', 'vše v pořádku', 0.35, 0.19);
-
-insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
-    values ('HOSK1043', DATE '2019-06-30', 'vše v pořádku', 0.30, 1.20);
-insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
-    values ('HOSK1043', DATE '2019-08-12', 'nechuť k jídlu', 0.22, 1.19);
-insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
-    values ('HOSK1043', DATE '2019-11-30', 'nechuť k jídlu, špatné trávení', 0.20, 1.20);
 
 -- insert 'udrzbar_pozice' records
 insert into udrzbar_pozice values (8611067135, 'KKO402D');
