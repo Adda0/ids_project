@@ -302,7 +302,7 @@ BEGIN
     insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
         values ('HOSK1043', DATE '2019-08-12', 'nechuť k jídlu', 0.22, 1.19)
         returning id_jedince, id into mereni_record;
-    insert into osetrovatel_mereni values (9502233628, mereni_record.id_jedince, mereni_record.id);
+    insert into osetrovatel_mereni values (9106077256, mereni_record.id_jedince, mereni_record.id);
 
     insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
         values ('HOSK1043', DATE '2019-11-30', 'nechuť k jídlu, špatné trávení', 0.20, 1.20)
