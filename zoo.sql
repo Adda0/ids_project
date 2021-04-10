@@ -297,7 +297,7 @@ BEGIN
     insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
         values ('HOSK1043', DATE '2019-06-30', 'vše v pořádku', 0.30, 1.20)
         returning id_jedince, id into mereni_record;
-    insert into osetrovatel_mereni values (9502233628, mereni_record.id_jedince, mereni_record.id);
+    insert into osetrovatel_mereni values (7663214164, mereni_record.id_jedince, mereni_record.id);
 
     insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
         values ('HOSK1043', DATE '2019-08-12', 'nechuť k jídlu', 0.22, 1.19)
@@ -307,17 +307,17 @@ BEGIN
     insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
         values ('HOSK1043', DATE '2019-11-30', 'nechuť k jídlu, špatné trávení', 0.20, 1.20)
         returning id_jedince, id into mereni_record;
-    insert into osetrovatel_mereni values (9502233628, mereni_record.id_jedince, mereni_record.id);
+    insert into osetrovatel_mereni values (7663214164, mereni_record.id_jedince, mereni_record.id);
 
     insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
-        values ('VLAR0001', DATE '2020-04-12', 'línající srst', 49.42, 1.25)
+        values ('VLAR0001', DATE '2020-04-12', 'vše v pořádku', 49.42, 1.25)
         returning id_jedince, id into mereni_record;
-    insert into osetrovatel_mereni values (9502233628, mereni_record.id_jedince, mereni_record.id);
+    insert into osetrovatel_mereni values (7663214164, mereni_record.id_jedince, mereni_record.id);
 
     insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
         values ('VLAR0001', DATE '2019-12-30', 'línající srst, poškozené oko', 47.30, 1.30)
         returning id_jedince, id into mereni_record;
-    insert into osetrovatel_mereni values (9502233628, mereni_record.id_jedince, mereni_record.id);
+    insert into osetrovatel_mereni values (9106077256, mereni_record.id_jedince, mereni_record.id);
 
     insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
         values ('HOSK1489', DATE '2021-01-01', 'vše v pořádku', 0.32, 0.16)
@@ -325,9 +325,79 @@ BEGIN
     insert into osetrovatel_mereni values (9106077256, mereni_record.id_jedince, mereni_record.id);
 
     insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
-        values ('HOSK1489', DATE '2021-03-01', 'vše v pořádku', 0.35, 0.19)
+        values ('PLRU0003', DATE '2021-01-01', 'vše v pořádku', 3.1, 115)
+        returning id_jedince, id into mereni_record;
+    insert into osetrovatel_mereni values (7663214164, mereni_record.id_jedince, mereni_record.id);
+
+    insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
+        values ('PLRU0003', DATE '2021-02-05', 'bolest křídla', 3.0, 110)
+        returning id_jedince, id into mereni_record;
+    insert into osetrovatel_mereni values (9106077256, mereni_record.id_jedince, mereni_record.id);
+
+    insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
+        values ('PLRU0003', DATE '2021-03-09', 'vše v pořádku', 2.6, 110)
+        returning id_jedince, id into mereni_record;
+    insert into osetrovatel_mereni values (7663214164, mereni_record.id_jedince, mereni_record.id);
+
+    insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
+        values ('PLRU0003', DATE '2021-03-13', 'vše v pořádku', 2.0, 100)
+        returning id_jedince, id into mereni_record;
+    insert into osetrovatel_mereni values (7663214164, mereni_record.id_jedince, mereni_record.id);
+
+    insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
+        values ('PLRU0003', DATE '2021-03-23', 'ztráta váhy, nechuť k jídlu, nečinnost, poškozené křídlo, vypadávající peří', 1.9, 109)
         returning id_jedince, id into mereni_record;
     insert into osetrovatel_mereni values (9106077256, mereni_record.id_jedince, mereni_record.id);
 END;
 /
 
+-- Zjisti, kteri jedinci uhynuli.
+select j.id, j.jmeno, zd.nazev, j.datum_narozeni, j.datum_umrti
+    from jedinec j, zivocisny_druh zd
+    where j.datum_umrti is not null and j.zastupce_druhu = zd.nazev
+order by j.datum_umrti;
+
+-- Zobraz mereni jedince 'HOSK1043'
+select m.*
+    from jedinec j, mereni m
+    where j.id = m.id_jedince and j.id = 'HOSK1043';
+
+-- Zjisti, kdo byl primarnim osetrovatelem jedince 'HOSK1043' a jak ho je mozne kontaktovat.
+select oj.osetrovatel_id, o.jmeno, o.email, z.telefon
+    from jedinec j, osetrovatel_jedinec oj, zamestnanec z, osoba o
+    where j.id = oj.jedinec_id and j.id = 'HOSK1043' and z.id = oj.osetrovatel_id and o.id = oj.osetrovatel_id;
+
+-- Zjisti, kteri osetrovatele provadeli mereni jedince 'HOSK1043' a kontakt na ne.
+select unique om.osetrovatel_id, o.jmeno, o.email, z.telefon
+    from jedinec j, osetrovatel_mereni om, zamestnanec z, osoba o
+    where j.id = om.jedinec_id and j.id = 'HOSK1043' and z.id = om.osetrovatel_id and o.id = om.osetrovatel_id;
+
+-- Zjisti, kteri ze zamestnancu provadejicich mereni na 'HOSK1043' provadeli take mereni na ostatnich uhynulych zviratech
+select unique om.osetrovatel_id, o.jmeno, o.email, z.telefon, j.id, j.jmeno, j.datum_narozeni, j.datum_umrti
+    from jedinec j, osetrovatel_mereni om, zamestnanec z, osoba o
+    where j.datum_umrti is not null and j.id<>'HOSK1043' and om.jedinec_id = j.id and om.osetrovatel_id = z.id and
+          z.id = o.id and om.osetrovatel_id in (
+            select unique om2.osetrovatel_id
+                from jedinec j2, osetrovatel_mereni om2, zamestnanec z2, osoba o2
+                where j2.id = om2.jedinec_id and j2.id = 'HOSK1043' and z2.id = om2.osetrovatel_id and o2.id = om2.osetrovatel_id
+        );
+
+-- Podivejme se na dana mereni jedince 'PLRU0003'.
+select m.*, om.osetrovatel_id, o.jmeno
+    from jedinec j, mereni m, osetrovatel_mereni om, osoba o
+    where j.datum_umrti is not null and j.id<>'HOSK1043' and m.id_jedince = j.id and om.jedinec_id = j.id and
+          om.mereni_id = m.id and om.osetrovatel_id = o.id and om.osetrovatel_id in (
+            select unique om2.osetrovatel_id
+                from jedinec j2, osetrovatel_mereni om2, zamestnanec z2, osoba o2
+                where j2.id = om2.jedinec_id and j2.id = 'HOSK1043' and z2.id = om2.osetrovatel_id and o2.id = om2.osetrovatel_id
+        )
+    order by m.datum_mereni;
+
+-- Pockat, proc si osetrovatel '7663214164' nevsiml vyrazne ztraty vahy, zrejmych potizi s kridlem a dalsich problemu?
+-- To vypada na zanedbani pracovnich povinonsti vedoucich az k uhynuti jedince 'PLRU0003'.
+-- Ktere jedince osetrovatel '7663214164' meri nebo je jejich primarnim osetrovatelem?
+select unique j.id, j.jmeno, j.zastupce_druhu
+    from jedinec j, zivocisny_druh zd, mereni m, osetrovatel_mereni om, osetrovatel_jedinec oj
+    where j.datum_umrti is null and j.zastupce_druhu = zd.nazev and ((m.id_jedince = j.id and om.jedinec_id = j.id and om.mereni_id = m.id and
+          om.osetrovatel_id = '7663214164') or (oj.osetrovatel_id = '7663214164' and oj.jedinec_id = j.id));
+-- Mozna by se o tyto jedince mel postarat nekdo jiny...
