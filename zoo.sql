@@ -212,7 +212,7 @@ insert into jedinec values ('ANVE015', 'Anaka', DATE '2018-11-10', null, 'anakon
 -- insert 'zamestnanec' records
 insert into osoba values (9910244245, 'David Mihola', 'Brno, 635 00', 'xmihol00@stud.fit.vutbr.cz');
 insert into zamestnanec values (9910244245, '8521473667/0800', '+420774826266', DATE '2018-07-21', 42000, null, 'spravce');
-insert into osoba values (9502233628, 'Jakub Beran', 'Znojmo 965 33', 'beran.jakub@google.cz');
+insert into osoba values (9502233628, 'Jakub Beran', 'Znojmo 965 33', 'beran.jakub@gmail.com');
 insert into zamestnanec values (9502233628, '9962473356/0600', '+420965243312', DATE '2019-09-26', 32850, 9910244245, 'udrzbar');
 insert into osoba values (9106077256, 'Vlasta Lajdová', 'Zlín, 168 36', 'vlajdova@volny.cz');
 insert into zamestnanec values (9106077256, '2274668512/0800', '+420776225841', DATE '2017-11-03', 34009, 9910244245, 'osetrovatel');
@@ -228,9 +228,9 @@ insert into zamestnanec values (9611251334, '1126648792/0700', '+420135879624', 
 -- insert 'navstevnik' records
 insert into osoba values (1, 'Petr Ponožka', 'Liberec, 264 02', 'p.p@centrum.cz');
 insert into navstevnik values (1, 863, DATE '2021-09-13', 13);
-insert into osoba values (2, 'Libuše Baledová', 'Ostrava, 523 41', 'ba.li@google.cz');
+insert into osoba values (2, 'Libuše Baledová', 'Ostrava, 523 41', 'ba.li@gmail.com');
 insert into navstevnik values (2, 65, DATE '2021-04-26', 8);
-insert into osoba values (3, 'Barbora Hranolová', 'Kladno, 746 82', 'hranolka@google.cz');
+insert into osoba values (3, 'Barbora Hranolová', 'Kladno, 746 82', 'hranolka@gmail.com');
 insert into navstevnik values (3, 1366, DATE '2021-10-02', 16);
 insert into osoba values (4, 'Marek Brambora', 'Plzeň, 234 11', 'bramboram@volny.cz');
 insert into navstevnik values (4, 733, DATE '2021-08-26', 12);
@@ -420,3 +420,91 @@ select typ, count(*) as pocet_pozic_daneho_typu
     where typ<>'vybeh' and pavilon is not null
     group by typ
     order by pocet_pozic_daneho_typu desc;
+
+-- select: zamestnanec
+SELECT * 
+FROM zamestnanec
+join osoba on osoba.ID = zamestnanec.ID;
+
+-- select: osetrovatel
+SELECT * 
+FROM zamestnanec
+join osoba on osoba.ID = zamestnanec.ID
+where zamestnanec.TYP = 'osetrovatel';
+
+-- select: udrzbar
+SELECT * 
+FROM zamestnanec
+join osoba on osoba.ID = zamestnanec.ID
+where zamestnanec.TYP = 'udrzbar';
+
+-- select: spravce
+SELECT * 
+FROM zamestnanec
+join osoba on osoba.ID = zamestnanec.ID
+where zamestnanec.TYP = 'spravce';
+
+-- select: jmeno a typ zamestnancu, jejich nadrizeny je David Mihola a serad je podle typu --TODO ?? fungovalo by i na 2 David Mihola?
+SELECT osoba.JMENO, zamestnanec.TYP
+FROM zamestnanec
+join osoba on osoba.ID = zamestnanec.ID
+where zamestnanec.NADRIZENY = 
+    (SELECT zamestnanec.ID
+     FROM osoba
+     join zamestnanec on osoba.ID = zamestnanec.ID
+     where osoba.JMENO = 'David Mihola')
+order by zamestnanec.TYP ASC;
+
+-- select: pocet zamestnancu, kteri maji email u seznam.cz nebo gmail.com
+SELECT COUNT(*) AS pocet
+from zamestnanec
+join osoba on osoba.ID = zamestnanec.ID
+where osoba.EMAIL LIKE '%@seznam.cz' or osoba.EMAIL LIKE '%@gmail.com';
+
+-- select: jmeno zamestnance a zivosicha, u ktereho provadel mereni
+SELECT DISTINCT osoba.JMENO as "jmeno osoby", jedinec.JMENO as "jmeno jedince"
+from osoba
+join osetrovatel_mereni on osetrovatel_mereni.OSETROVATEL_ID = osoba.ID
+join jedinec on jedinec.ID = osetrovatel_mereni.JEDINEC_ID
+order by osoba.JMENO;
+
+-- select: jmena zamestnancu a zivocihu u zamestnancu, kteri provedli aspon 3 mereni (mohla byt na stejnem zivocichovi)
+SELECT DISTINCT osoba.JMENO as "jmeno osoby", jedinec.JMENO as "jmeno jedince"
+from osoba
+join osetrovatel_mereni on osetrovatel_mereni.OSETROVATEL_ID = osoba.ID
+join jedinec on jedinec.ID = osetrovatel_mereni.JEDINEC_ID
+where osoba.ID in 
+    (SELECT OSETROVATEL_ID
+    from osetrovatel_mereni
+    GROUP by OSETROVATEL_ID
+    HAVING COUNT(osetrovatel_mereni.OSETROVATEL_ID) > 2)
+order by osoba.JMENO;
+
+-- select: jmena zamestnancu a zivocihu u zivocichu, kteri byli mereni aspon 3 osetrovateli
+SELECT DISTINCT osoba.JMENO as "jmeno osoby", jedinec.JMENO as "jmeno jedince"
+from jedinec
+join osetrovatel_mereni on osetrovatel_mereni.JEDINEC_ID = jedinec.ID
+join osoba on osoba.ID = osetrovatel_mereni.OSETROVATEL_ID
+where jedinec.ID in 
+    (SELECT JEDINEC_ID
+    from osetrovatel_mereni
+    GROUP by JEDINEC_ID
+    HAVING COUNT(osetrovatel_mereni.JEDINEC_ID) > 2)
+order by osoba.JMENO;
+
+-- select: jmenao zamestnancu a zivocichu u zamestnancu, kteri provedli mereni aspon na 3 zivocisich
+SELECT DISTINCT osoba.JMENO as "jmeno osoby", jedinec.JMENO as "jmeno jedince"
+from osoba
+join osetrovatel_mereni on osetrovatel_mereni.OSETROVATEL_ID = osoba.ID
+join jedinec on jedinec.ID = osetrovatel_mereni.JEDINEC_ID
+where osoba.ID in 
+    (SELECT OSETROVATEL_ID
+    from osetrovatel_mereni
+    GROUP by OSETROVATEL_ID
+    HAVING COUNT(DISTINCT osetrovatel_mereni.JEDINEC_ID) > 2)
+order by osoba.JMENO;
+
+-- select: navstevnik
+SELECT * 
+FROM navstevnik
+join osoba on osoba.ID = navstevnik.ID;
