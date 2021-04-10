@@ -395,9 +395,28 @@ select m.*, om.osetrovatel_id, o.jmeno
 
 -- Pockat, proc si osetrovatel '7663214164' nevsiml vyrazne ztraty vahy, zrejmych potizi s kridlem a dalsich problemu?
 -- To vypada na zanedbani pracovnich povinonsti vedoucich az k uhynuti jedince 'PLRU0003'.
+
+-- Kolik dalsich mereni provedl zamestnanec '7663214164' u kterych jedincu?
+select j.id, j.jmeno, j.zastupce_druhu, count(*) as pocet_mereni
+    from jedinec j, zivocisny_druh zd, mereni m, osetrovatel_mereni om
+    where j.id<>'HOSK1043' and j.zastupce_druhu = zd.nazev and m.id_jedince = j.id and om.jedinec_id = j.id and om.mereni_id = m.id and
+          om.osetrovatel_id = '7663214164'
+    group by j.id, j.jmeno, j.zastupce_druhu;
+-- Pro kolik zivych jedincu je osetrovatel '7663214164' jejich primarnim osetrovatelem?
+select count(*) as pocet_jedincu
+    from jedinec j, osetrovatel_jedinec oj
+    where j.datum_umrti is null and oj.osetrovatel_id = '7663214164' and oj.jedinec_id = j.id;
+
 -- Ktere jedince osetrovatel '7663214164' meri nebo je jejich primarnim osetrovatelem?
 select unique j.id, j.jmeno, j.zastupce_druhu
     from jedinec j, zivocisny_druh zd, mereni m, osetrovatel_mereni om, osetrovatel_jedinec oj
     where j.datum_umrti is null and j.zastupce_druhu = zd.nazev and ((m.id_jedince = j.id and om.jedinec_id = j.id and om.mereni_id = m.id and
           om.osetrovatel_id = '7663214164') or (oj.osetrovatel_id = '7663214164' and oj.jedinec_id = j.id));
 -- Mozna by se o tyto jedince mel postarat nekdo jiny...
+
+-- Kolik kleci/akvarii/terarii se celkem nachazi ve vsech pavilonech?
+select typ, count(*) as pocet_pozic_daneho_typu
+    from pozice
+    where typ<>'vybeh' and pavilon is not null
+    group by typ
+    order by pocet_pozic_daneho_typu desc;
