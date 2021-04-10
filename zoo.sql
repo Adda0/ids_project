@@ -107,7 +107,7 @@ create table zamestnanec_kvalifikace (
     kvalifikace_id varchar(15),
     foreign key (zamestnanec_id) references zamestnanec (id),
     foreign key (kvalifikace_id) references kvalifikace (kod_kvalifikace),
-    constraint unique_zamestnanec_kvalifikace unique (zamestnanec_id, kvalifikace_id)
+    constraint pk_zamestnanec_kvalifikace primary key (zamestnanec_id, kvalifikace_id)
 );
 
 create table osetrovatel_jedinec (
@@ -115,7 +115,7 @@ create table osetrovatel_jedinec (
     jedinec_id varchar(20),
     foreign key (osetrovatel_id) references zamestnanec (id),
     foreign key (jedinec_id) references jedinec (id),
-    constraint unique_osetrovatel_jednice unique (osetrovatel_id, jedinec_id)
+    constraint pk_osetrovatel_jednice primary key (osetrovatel_id, jedinec_id)
 );
 
 create table osetrovatel_mereni (
@@ -124,7 +124,7 @@ create table osetrovatel_mereni (
     mereni_id int,
     foreign key (osetrovatel_id) references zamestnanec (id),
     foreign key (jedinec_id, mereni_id) references mereni (id_jedince, id),
-    constraint unique_osetrovatel_mereni unique (osetrovatel_id, jedinec_id, mereni_id)
+    constraint pk_osetrovatel_mereni primary key (osetrovatel_id, jedinec_id, mereni_id)
 );
 
 create table udrzbar_pozice (
@@ -132,7 +132,7 @@ create table udrzbar_pozice (
     pozice_id varchar(20),
     foreign key (udrzbar_id) references zamestnanec (id),
     foreign key (pozice_id) references pozice (id),
-    constraint unique_udrzbar_pozice unique (udrzbar_id, pozice_id)
+    constraint pk_udrzbar_pozice primary key (udrzbar_id, pozice_id)
 );
 
 -- insert 'pavilon' records
@@ -329,4 +329,5 @@ BEGIN
         returning id_jedince, id into mereni_record;
     insert into osetrovatel_mereni values (9106077256, mereni_record.id_jedince, mereni_record.id);
 END;
+/
 
