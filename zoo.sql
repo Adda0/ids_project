@@ -341,7 +341,7 @@ BEGIN
     insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
         values ('PLRU0003', DATE '2021-03-09', 'vše v pořádku', 2.6, 110)
         returning id_jedince, id into mereni_record;
-    insert into osetrovatel_mereni values (7663214164, mereni_record.id_jedince, mereni_record.id);
+    insert into osetrovatel_mereni values (8611067135, mereni_record.id_jedince, mereni_record.id);
 
     insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
         values ('PLRU0003', DATE '2021-03-13', 'vše v pořádku', 2.0, 100)
@@ -496,7 +496,7 @@ where jedinec.ID in
     (SELECT JEDINEC_ID
     from osetrovatel_mereni
     GROUP by JEDINEC_ID
-    HAVING COUNT(osetrovatel_mereni.JEDINEC_ID) > 2)
+    HAVING COUNT(DISTINCT osetrovatel_mereni.OSETROVATEL_ID) > 2)
 order by osoba.JMENO;
 
 -- select: jmena zamestnancu, jmena jedincu a data mereni u zamestnancu, kteri provedli mereni aspon na 3 zivocisich
