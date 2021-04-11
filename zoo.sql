@@ -423,14 +423,14 @@ select unique j.id, j.jmeno, j.zastupce_druhu
 -- Konec patrani: Uhynuli jedinci
 ----------------------------------------------------------
 
--- select: Kolik kleci/akvarii/terarii se celkem nachazi ve vsech pavilonech?
+-- select: Kolik kleci/akvarii/terarii se celkem nachazi ve vsech pavilonech serazenych sestupne?
 select typ, count(*) as pocet_pozic_daneho_typu
     from pozice
     where typ<>'vybeh' and pavilon is not null
     group by typ
     order by pocet_pozic_daneho_typu desc;
 
--- select: zamestnanec
+-- select: vsechny zamestnance
 SELECT * 
 FROM zamestnanec
 join osoba on osoba.ID = zamestnanec.ID;
@@ -453,7 +453,7 @@ FROM zamestnanec
 join osoba on osoba.ID = zamestnanec.ID
 where zamestnanec.TYP = 'spravce';
 
--- select: jmeno a typ zamestnancu, jejich nadrizeny je David Mihola a serad je podle typu (predpokladame, ze David Mihola je jedniny)
+-- select: jmeno a typ zamestnancu, jejichz nadrizeny je David Mihola, a serad je podle typu (predpokladame, ze David Mihola je jedniny)
 SELECT osoba.JMENO, zamestnanec.TYP
 FROM zamestnanec
 join osoba on osoba.ID = zamestnanec.ID
@@ -470,7 +470,7 @@ from zamestnanec
 join osoba on osoba.ID = zamestnanec.ID
 where osoba.EMAIL LIKE '%@seznam.cz' or osoba.EMAIL LIKE '%@gmail.com';
 
--- select: jmeno zamestnance a zivosicha, u ktereho zamestnanec provadel mereni a datum tohoto mereni
+-- select: jmeno zamestnance a zivocicha, u ktereho zamestnanec provadel mereni a datum tohoto mereni
 SELECT DISTINCT osoba.JMENO as "jmeno osoby", jedinec.JMENO as "jmeno jedince", mereni.DATUM_MERENI
 from osoba
 join osetrovatel_mereni on osetrovatel_mereni.OSETROVATEL_ID = osoba.ID
@@ -552,7 +552,7 @@ left join osetrovatel_jedinec on osetrovatel_jedinec.OSETROVATEL_ID = osoba.ID
 left join jedinec on jedinec.ID = osetrovatel_jedinec.JEDINEC_ID
 join zamestnanec on zamestnanec.ID = osoba.ID;
 
--- select: jmena zamestnanecu a jejich pracovni pozice, u osetrovatelu jmena jedincu, ktere osetruji, spojenych do jednoho radku 
+-- select: jmena zamestnancu a jejich pracovni pozice, u osetrovatelu jmena jedincu, ktere osetruji, spojenych do jednoho radku
 -- a u udrzbaru ID pozic, ktere udrzuji, spojenych do jednoho radku
 SELECT tab.JMENO, tab.pozice, LISTAGG(tab.osetruje, ', ') WITHIN GROUP (ORDER BY tab.osetruje) as "osetruje",
 LISTAGG(tab.udrzuje, ', ') WITHIN GROUP (ORDER BY tab.udrzuje) as "udrzuje"
