@@ -224,6 +224,8 @@ insert into osoba values (7663214164, 'Jaroslava Mladá', 'Znojmo 412 01', 'mlad
 insert into zamestnanec values (7663214164, '5638169742/0102', '+420556412874', DATE '2014-11-10', 31270, 9106077256, 'osetrovatel');
 insert into osoba values (9611251334, 'Milan Lander', 'Jihlava 512 34', 'milander@seznam.cz');
 insert into zamestnanec values (9611251334, '1126648792/0700', '+420135879624', DATE '2018-02-03', 28762, 9502233628, 'udrzbar');
+insert into osoba values (9862038563, 'Ludmila Pakostová', 'Zlín, 168 36', 'pakostovaludmila@seznam.cz');
+insert into zamestnanec values (9862038563, '5569218423/0620', '+420742698531', DATE '2021-03-20', 22671, 7663214164, 'osetrovatel');
 
 -- insert 'navstevnik' records
 insert into osoba values (1, 'Petr Ponožka', 'Liberec, 264 02', 'p.p@centrum.cz');
@@ -234,6 +236,8 @@ insert into osoba values (3, 'Barbora Hranolová', 'Kladno, 746 82', 'hranolka@g
 insert into navstevnik values (3, 1366, DATE '2021-10-02', 16);
 insert into osoba values (4, 'Marek Brambora', 'Plzeň, 234 11', 'bramboram@volny.cz');
 insert into navstevnik values (4, 733, DATE '2021-08-26', 12);
+-- osoba Pavel Okurka
+insert into navstevnik values (7603242237, 159, DATE '2021-06-19', 4);
 
 -- insert 'kvalifikace' records
 insert into kvalifikace values ('OPRAVNENI_1');
@@ -426,13 +430,13 @@ SELECT *
 FROM zamestnanec
 join osoba on osoba.ID = zamestnanec.ID;
 
--- select: osetrovatel
+-- select: vsechny osetrovatele
 SELECT * 
 FROM zamestnanec
 join osoba on osoba.ID = zamestnanec.ID
 where zamestnanec.TYP = 'osetrovatel';
 
--- select: udrzbar
+-- select: vsechny udrzbare
 SELECT * 
 FROM zamestnanec
 join osoba on osoba.ID = zamestnanec.ID
@@ -444,7 +448,7 @@ FROM zamestnanec
 join osoba on osoba.ID = zamestnanec.ID
 where zamestnanec.TYP = 'spravce';
 
--- select: jmeno a typ zamestnancu, jejich nadrizeny je David Mihola a serad je podle typu --TODO ?? fungovalo by i na 2 David Mihola?
+-- select: jmeno a typ zamestnancu, jejich nadrizeny je David Mihola a serad je podle typu (predpokladame, ze David Mihola je jedniny)
 SELECT osoba.JMENO, zamestnanec.TYP
 FROM zamestnanec
 join osoba on osoba.ID = zamestnanec.ID
@@ -461,18 +465,20 @@ from zamestnanec
 join osoba on osoba.ID = zamestnanec.ID
 where osoba.EMAIL LIKE '%@seznam.cz' or osoba.EMAIL LIKE '%@gmail.com';
 
--- select: jmeno zamestnance a zivosicha, u ktereho provadel mereni
-SELECT DISTINCT osoba.JMENO as "jmeno osoby", jedinec.JMENO as "jmeno jedince"
+-- select: jmeno zamestnance a zivosicha, u ktereho zamestnanec provadel mereni a datum tohoto mereni
+SELECT DISTINCT osoba.JMENO as "jmeno osoby", jedinec.JMENO as "jmeno jedince", mereni.DATUM_MERENI
 from osoba
 join osetrovatel_mereni on osetrovatel_mereni.OSETROVATEL_ID = osoba.ID
 join jedinec on jedinec.ID = osetrovatel_mereni.JEDINEC_ID
+join mereni on mereni.ID = osetrovatel_mereni.MERENI_ID
 order by osoba.JMENO;
 
--- select: jmena zamestnancu a zivocihu u zamestnancu, kteri provedli aspon 3 mereni (mohla byt na stejnem zivocichovi)
-SELECT DISTINCT osoba.JMENO as "jmeno osoby", jedinec.JMENO as "jmeno jedince"
+-- select: jmena zamestnancu, zivocihu a data mereni u zamestnancu, kteri provedli aspon 3 mereni (mohla byt na stejnem zivocichovi)
+SELECT DISTINCT osoba.JMENO as "jmeno osoby", jedinec.JMENO as "jmeno jedince", mereni.DATUM_MERENI
 from osoba
 join osetrovatel_mereni on osetrovatel_mereni.OSETROVATEL_ID = osoba.ID
 join jedinec on jedinec.ID = osetrovatel_mereni.JEDINEC_ID
+join mereni on mereni.ID = osetrovatel_mereni.MERENI_ID
 where osoba.ID in 
     (SELECT OSETROVATEL_ID
     from osetrovatel_mereni
@@ -480,11 +486,12 @@ where osoba.ID in
     HAVING COUNT(osetrovatel_mereni.OSETROVATEL_ID) > 2)
 order by osoba.JMENO;
 
--- select: jmena zamestnancu a zivocihu u zivocichu, kteri byli mereni aspon 3 osetrovateli
-SELECT DISTINCT osoba.JMENO as "jmeno osoby", jedinec.JMENO as "jmeno jedince"
+-- select: jmena zamestnancu, jmena jedincu a data mereni u zivocichu, kteri byli mereni aspon 3 osetrovateli
+SELECT DISTINCT osoba.JMENO as "jmeno osoby", jedinec.JMENO as "jmeno jedince", mereni.DATUM_MERENI
 from jedinec
 join osetrovatel_mereni on osetrovatel_mereni.JEDINEC_ID = jedinec.ID
 join osoba on osoba.ID = osetrovatel_mereni.OSETROVATEL_ID
+join mereni on mereni.ID = osetrovatel_mereni.MERENI_ID
 where jedinec.ID in 
     (SELECT JEDINEC_ID
     from osetrovatel_mereni
@@ -492,11 +499,12 @@ where jedinec.ID in
     HAVING COUNT(osetrovatel_mereni.JEDINEC_ID) > 2)
 order by osoba.JMENO;
 
--- select: jmenao zamestnancu a zivocichu u zamestnancu, kteri provedli mereni aspon na 3 zivocisich
-SELECT DISTINCT osoba.JMENO as "jmeno osoby", jedinec.JMENO as "jmeno jedince"
+-- select: jmena zamestnancu, jmena jedincu a data mereni u zamestnancu, kteri provedli mereni aspon na 3 zivocisich
+SELECT DISTINCT osoba.JMENO as "jmeno osoby", jedinec.JMENO as "jmeno jedince", mereni.DATUM_MERENI
 from osoba
 join osetrovatel_mereni on osetrovatel_mereni.OSETROVATEL_ID = osoba.ID
 join jedinec on jedinec.ID = osetrovatel_mereni.JEDINEC_ID
+join mereni on mereni.ID = osetrovatel_mereni.MERENI_ID
 where osoba.ID in 
     (SELECT OSETROVATEL_ID
     from osetrovatel_mereni
@@ -504,7 +512,62 @@ where osoba.ID in
     HAVING COUNT(DISTINCT osetrovatel_mereni.JEDINEC_ID) > 2)
 order by osoba.JMENO;
 
--- select: navstevnik
+-- select: castku, kterou zoo vyplati mesicne zamestnancum
+SELECT SUM(zamestnanec.PLAT) as vyplaty
+from zamestnanec;
+
+-- select: castku, kterou zoo vyplati mesicne vsem zamestnancum dohromady, udrzbarum zvast, osetrovatelum zvlast a spravci zvlast
+SELECT SUM(zamestnanec.PLAT) as "vyplaty", SUM(udrzbar.PLAT) as "vypalty udrzbaru", SUM(osetrovatel.PLAT) as "vyplaty osetrovatelu", SUM(spravce.PLAT) as "plat spravce"
+from zamestnanec
+left join (SELECT zamestnanec.ID, zamestnanec.PLAT
+      from zamestnanec
+      where zamestnanec.TYP = 'udrzbar') udrzbar on udrzbar.ID = zamestnanec.ID
+left join (SELECT zamestnanec.ID, zamestnanec.PLAT
+      from zamestnanec
+      where zamestnanec.TYP = 'osetrovatel') osetrovatel on osetrovatel.ID = zamestnanec.ID
+left join (SELECT zamestnanec.ID, zamestnanec.PLAT
+      from zamestnanec
+      where zamestnanec.TYP = 'spravce') spravce on spravce.ID = zamestnanec.ID;
+
+-- select: vsechny zamestnance, kteri nemaji zadnou kvalifikaci
+SELECT osoba.JMENO, zamestnanec.TYP as "pozice"
+from osoba
+join zamestnanec on zamestnanec.ID = osoba.ID
+WHERE not EXISTS (
+    SELECT *
+    from zamestnanec_kvalifikace
+    WHERE zamestnanec_kvalifikace.zamestnanec_id = osoba.ID
+);
+
+-- select: jmena zamestnanecu a jejich pracovni pozice, u osetrovatelu jmena jedincu, ktere osetruji, a u udrzbaru ID pozic, ktere udrzuji
+SELECT osoba.JMENO, zamestnanec.TYP as "pozice", udrzbar_pozice.POZICE_ID as "udrzuje", jedinec.JMENO as "osetruje"
+from osoba
+left join udrzbar_pozice on udrzbar_pozice.UDRZBAR_ID = osoba.ID
+left join osetrovatel_jedinec on osetrovatel_jedinec.OSETROVATEL_ID = osoba.ID
+left join jedinec on jedinec.ID = osetrovatel_jedinec.JEDINEC_ID
+join zamestnanec on zamestnanec.ID = osoba.ID;
+
+-- select: jmena zamestnanecu a jejich pracovni pozice, u osetrovatelu jmena jedincu, ktere osetruji, spojenych do jednoho radku 
+-- a u udrzbaru ID pozic, ktere udrzuji, spojenych do jednoho radku
+SELECT tab.JMENO, tab.pozice, LISTAGG(tab.osetruje, ', ') WITHIN GROUP (ORDER BY tab.osetruje) as "osetruje",
+LISTAGG(tab.udrzuje, ', ') WITHIN GROUP (ORDER BY tab.udrzuje) as "udrzuje"
+from (SELECT DISTINCT osoba.JMENO, zamestnanec.TYP as pozice, jedinec.JMENO as osetruje, udrzbar_pozice.POZICE_ID as udrzuje
+      from osoba
+      left join osetrovatel_jedinec on osetrovatel_jedinec.OSETROVATEL_ID = osoba.ID
+      left join jedinec on jedinec.ID = osetrovatel_jedinec.JEDINEC_ID
+      left join udrzbar_pozice on udrzbar_pozice.UDRZBAR_ID = osoba.ID
+      join zamestnanec on zamestnanec.ID = osoba.ID) tab
+GROUP by tab.jmeno, tab.pozice;
+
+-- select: vsechny navstevniky
 SELECT * 
 FROM navstevnik
 join osoba on osoba.ID = navstevnik.ID;
+
+-- select: id a jmena zamestnancu, kteri jsou zaroven registrovani i jako zakaznici
+SELECT osoba.ID, osoba.JMENO
+from zamestnanec
+join osoba on osoba.ID = zamestnanec.ID
+where EXISTS (SELECT *
+              from navstevnik
+              where zamestnanec.ID = navstevnik.ID);
