@@ -154,7 +154,7 @@ insert into pozice (id, prostredi, datum_udrzby, typ, objem, pavilon)
 insert into pozice (id, prostredi, datum_udrzby, typ, objem, pavilon)
     values ('KPT026N', 'Oceán', DATE '2007-05-14', 'klec', 12, null);
 insert into pozice (id, prostredi, datum_udrzby, typ, objem, pavilon)
-    values ('KKO402D', 'asie', DATE '2010-04-26', 'klec', 30, 'KO174H');
+    values ('KKO402D', 'Asie', DATE '2010-04-26', 'klec', 30, 'KO174H');
 insert into pozice (id, prostredi, datum_udrzby, typ, objem, pavilon)
     values ('KTR123B', 'Brazílie', DATE '2002-05-30', 'klec', 25, 'TR058R');
 insert into pozice (id, prostredi, datum_udrzby, typ, plocha)
@@ -165,7 +165,7 @@ insert into pozice (id, prostredi, datum_udrzby, typ, plocha)
     values ('aVME743A', 'arktický', DATE '2021-04-15', 'výběh', 320);
 
 -- insert 'zivocisny_druh' records
-insert into zivocisny_druh values ('lev pustinný', 'Lev je po tygrovi druhá největší kočkovitá šelma. U lvů se projevuje výrazný pohlavní dimorfismus, hlavním a určujícím rysem lvích samců je jejich hříva. Samci váží 150–250 kg a samice 90–165 kg. V divočině se lvi dožívají 10–14 let, kdežto v zajetí se mohou dožít i věku 20 let. Dříve se lvi vyskytovali v celé Africe, ve velké části asie, v Evropě a dokonce i v Americe, dnes se vyskytují pouze v Africe a v nevelké části Indie. Jsou to společenská zvířata a loví ve smečkách. Jejich nejčastější kořistí jsou velcí savci, především kopytníci. Mezinárodní svaz ochrany přírody hodnotí lva jako zranitelný druh.');
+insert into zivocisny_druh values ('lev pustinný', 'Lev je po tygrovi druhá největší kočkovitá šelma. U lvů se projevuje výrazný pohlavní dimorfismus, hlavním a určujícím rysem lvích samců je jejich hříva. Samci váží 150–250 kg a samice 90–165 kg. V divočině se lvi dožívají 10–14 let, kdežto v zajetí se mohou dožít i věku 20 let. Dříve se lvi vyskytovali v celé Africe, ve velké části Asie, v Evropě a dokonce i v Americe, dnes se vyskytují pouze v Africe a v nevelké části Indie. Jsou to společenská zvířata a loví ve smečkách. Jejich nejčastější kořistí jsou velcí savci, především kopytníci. Mezinárodní svaz ochrany přírody hodnotí lva jako zranitelný druh.');
 insert into zivocisny_druh values ('levhart skvrnitý', 'Levhart je statná kočkovitá šelma s velkou hlavou, středně dlouhými končetinami a dlouhým ocasem. Velmi se podobá jaguárovi, který je však robustnější, má relativně kratší ocas a větší rozety. Hmotnost dospělých jedinců se pohybuje od 17 kg do 90 kg, délka těla včetně ocasu od 140 cm do 240 cm, výjimečně i více.');
 insert into zivocisny_druh values ('tygr ussurijský', 'Tygr je velká kočkovitá šelma žijící v asii. Ze současných kočkovitých šelem je největší a díky charakteristickým tmavým pruhům na zlatožluté či rudohnědé srsti nezaměnitelný. Dříve byl druh rozdělován do 9 poddruhů, v současné době jsou rozeznávány pouze 2 poddruhy. Někteří tygři běžně dosahují délky trupu přes 2 m, délka ocasu bývá až 90 cm a váha samců mnohdy více než 200 kg; samice jsou výrazně menší, dosahují váhy maximálně kolem 130 kg.');
 
@@ -201,7 +201,7 @@ insert into jedinec values ('HOSK1489', 'Petr', DATE '2020-09-04', null, 'holub 
 insert into jedinec values ('REOS044', 'Mak', DATE '2018-09-01', DATE '2020-10-17', 'rejnok ostnatý', null);
 insert into jedinec values ('REOS045', 'Boko', DATE '2018-09-04', null, 'rejnok ostnatý', 'Ann006K');
 
-insert into jedinec values ('MasK002', 'Macko', DATE '2019-06-30', null, 'máčka skvrnitá', 'Ann006K');
+insert into jedinec values ('MASK002', 'Macko', DATE '2019-06-30', null, 'máčka skvrnitá', 'Ann006K');
 
 insert into jedinec values ('ARAR001', 'Petr', DATE '2020-06-15', null, 'ara arakanga', 'KTR123B');
 insert into jedinec values ('ALST421', 'Petr', DATE '2019-07-24', null, 'albatros stěhovavý', 'KPT026N');
@@ -293,8 +293,8 @@ insert into udrzbar_pozice values (9611251334, 'KPT001M');
 -- insert 'mereni' and 'osetrovatel_mereni' records
 DECLARE
     type mereni_record_t is record (
-        id_jedince mereni.id_jedince%typE,
-        id mereni.id%typE
+        id_jedince mereni.id_jedince%TYPE,
+        id mereni.id%TYPE
     );
     mereni_record mereni_record_t;
 BEGIN
