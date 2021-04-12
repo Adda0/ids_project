@@ -150,7 +150,7 @@ insert into pozice (id, prostredi, datum_udrzby, typ, objem, pavilon)
 insert into pozice (id, prostredi, datum_udrzby, typ, objem, pavilon)
     values ('TPL666E', 'Amazonka', DATE '2007-05-14', 'terárium', 4, 'PL102B');
 insert into pozice (id, prostredi, datum_udrzby, typ, objem, pavilon)
-    values ('Ann006K', 'Oceán', DATE '2007-05-14', 'akvárium', 6, 'RY100G');
+    values ('ANN006K', 'Oceán', DATE '2007-05-14', 'akvárium', 6, 'RY100G');
 insert into pozice (id, prostredi, datum_udrzby, typ, objem, pavilon)
     values ('KPT026N', 'Oceán', DATE '2007-05-14', 'klec', 12, null);
 insert into pozice (id, prostredi, datum_udrzby, typ, objem, pavilon)
@@ -161,8 +161,6 @@ insert into pozice (id, prostredi, datum_udrzby, typ, plocha)
     values ('VLV075S', 'savana', DATE '2017-10-08', 'výběh', 460);
 insert into pozice (id, prostredi, datum_udrzby, typ, plocha)
     values ('VME743A', 'arktický', DATE '2021-04-15', 'výběh', 320);
-insert into pozice (id, prostredi, datum_udrzby, typ, plocha)
-    values ('aVME743A', 'arktický', DATE '2021-04-15', 'výběh', 320);
 
 -- insert 'zivocisny_druh' records
 insert into zivocisny_druh values ('lev pustinný', 'Lev je po tygrovi druhá největší kočkovitá šelma. U lvů se projevuje výrazný pohlavní dimorfismus, hlavním a určujícím rysem lvích samců je jejich hříva. Samci váží 150–250 kg a samice 90–165 kg. V divočině se lvi dožívají 10–14 let, kdežto v zajetí se mohou dožít i věku 20 let. Dříve se lvi vyskytovali v celé Africe, ve velké části Asie, v Evropě a dokonce i v Americe, dnes se vyskytují pouze v Africe a v nevelké části Indie. Jsou to společenská zvířata a loví ve smečkách. Jejich nejčastější kořistí jsou velcí savci, především kopytníci. Mezinárodní svaz ochrany přírody hodnotí lva jako zranitelný druh.');
@@ -199,9 +197,9 @@ insert into jedinec values ('HOSK1380', 'Petra', DATE '2020-08-14', null, 'holub
 insert into jedinec values ('HOSK1489', 'Petr', DATE '2020-09-04', null, 'holub skalní', 'KTR123B');
 
 insert into jedinec values ('REOS044', 'Mak', DATE '2018-09-01', DATE '2020-10-17', 'rejnok ostnatý', null);
-insert into jedinec values ('REOS045', 'Boko', DATE '2018-09-04', null, 'rejnok ostnatý', 'Ann006K');
+insert into jedinec values ('REOS045', 'Boko', DATE '2018-09-04', null, 'rejnok ostnatý', 'ANN006K');
 
-insert into jedinec values ('MASK002', 'Macko', DATE '2019-06-30', null, 'máčka skvrnitá', 'Ann006K');
+insert into jedinec values ('MASK002', 'Macko', DATE '2019-06-30', null, 'máčka skvrnitá', 'ANN006K');
 
 insert into jedinec values ('ARAR001', 'Petr', DATE '2020-06-15', null, 'ara arakanga', 'KTR123B');
 insert into jedinec values ('ALST421', 'Petr', DATE '2019-07-24', null, 'albatros stěhovavý', 'KPT026N');
@@ -212,7 +210,7 @@ insert into jedinec values ('ANVE015', 'Anaka', DATE '2018-11-10', null, 'anakon
 -- insert 'zamestnanec' records
 insert into osoba values (9910244245, 'David Mihola', 'Brno, 635 00', 'xmihol00@stud.fit.vutbr.cz');
 insert into zamestnanec values (9910244245, '8521473667/0800', '+420774826266', DATE '2018-07-21', 42000, null, 'spravce');
-insert into osoba values (9502233628, 'Jakub Beran', 'Znojmo 965 33', 'beran.jakub@google.cz');
+insert into osoba values (9502233628, 'Jakub Beran', 'Znojmo 965 33', 'beran.jakub@gmail.com');
 insert into zamestnanec values (9502233628, '9962473356/0600', '+420965243312', DATE '2019-09-26', 32850, 9910244245, 'udrzbar');
 insert into osoba values (9106077256, 'Vlasta Lajdová', 'Zlín, 168 36', 'vlajdova@volny.cz');
 insert into zamestnanec values (9106077256, '2274668512/0800', '+420776225841', DATE '2017-11-03', 34009, 9910244245, 'osetrovatel');
@@ -224,16 +222,20 @@ insert into osoba values (7663214164, 'Jaroslava Mladá', 'Znojmo 412 01', 'mlad
 insert into zamestnanec values (7663214164, '5638169742/0102', '+420556412874', DATE '2014-11-10', 31270, 9106077256, 'osetrovatel');
 insert into osoba values (9611251334, 'Milan Lander', 'Jihlava 512 34', 'milander@seznam.cz');
 insert into zamestnanec values (9611251334, '1126648792/0700', '+420135879624', DATE '2018-02-03', 28762, 9502233628, 'udrzbar');
+insert into osoba values (9862038563, 'Ludmila Pakostová', 'Zlín, 168 36', 'pakostovaludmila@seznam.cz');
+insert into zamestnanec values (9862038563, '5569218423/0620', '+420742698531', DATE '2021-03-20', 22671, 7663214164, 'osetrovatel');
 
 -- insert 'navstevnik' records
 insert into osoba values (1, 'Petr Ponožka', 'Liberec, 264 02', 'p.p@centrum.cz');
 insert into navstevnik values (1, 863, DATE '2021-09-13', 13);
-insert into osoba values (2, 'Libuše Baledová', 'Ostrava, 523 41', 'ba.li@google.cz');
+insert into osoba values (2, 'Libuše Baledová', 'Ostrava, 523 41', 'ba.li@gmail.com');
 insert into navstevnik values (2, 65, DATE '2021-04-26', 8);
-insert into osoba values (3, 'Barbora Hranolová', 'Kladno, 746 82', 'hranolka@google.cz');
+insert into osoba values (3, 'Barbora Hranolová', 'Kladno, 746 82', 'hranolka@gmail.com');
 insert into navstevnik values (3, 1366, DATE '2021-10-02', 16);
 insert into osoba values (4, 'Marek Brambora', 'Plzeň, 234 11', 'bramboram@volny.cz');
 insert into navstevnik values (4, 733, DATE '2021-08-26', 12);
+-- osoba Pavel Okurka
+insert into navstevnik values (7603242237, 159, DATE '2021-06-19', 4);
 
 -- insert 'kvalifikace' records
 insert into kvalifikace values ('OPRAVNENI_1');
@@ -297,7 +299,7 @@ BEGIN
     insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
         values ('HOSK1043', DATE '2019-06-30', 'vše v pořádku', 0.30, 1.20)
         returning id_jedince, id into mereni_record;
-    insert into osetrovatel_mereni values (9502233628, mereni_record.id_jedince, mereni_record.id);
+    insert into osetrovatel_mereni values (7663214164, mereni_record.id_jedince, mereni_record.id);
 
     insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
         values ('HOSK1043', DATE '2019-08-12', 'nechuť k jídlu', 0.22, 1.19)
@@ -307,17 +309,17 @@ BEGIN
     insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
         values ('HOSK1043', DATE '2019-11-30', 'nechuť k jídlu, špatné trávení', 0.20, 1.20)
         returning id_jedince, id into mereni_record;
-    insert into osetrovatel_mereni values (9502233628, mereni_record.id_jedince, mereni_record.id);
+    insert into osetrovatel_mereni values (7663214164, mereni_record.id_jedince, mereni_record.id);
 
     insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
-        values ('VLAR0001', DATE '2020-04-12', 'línající srst', 49.42, 1.25)
+        values ('VLAR0001', DATE '2020-04-12', 'vše v pořádku', 49.42, 1.25)
         returning id_jedince, id into mereni_record;
-    insert into osetrovatel_mereni values (9502233628, mereni_record.id_jedince, mereni_record.id);
+    insert into osetrovatel_mereni values (7663214164, mereni_record.id_jedince, mereni_record.id);
 
     insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
         values ('VLAR0001', DATE '2019-12-30', 'línající srst, poškozené oko', 47.30, 1.30)
         returning id_jedince, id into mereni_record;
-    insert into osetrovatel_mereni values (9502233628, mereni_record.id_jedince, mereni_record.id);
+    insert into osetrovatel_mereni values (9106077256, mereni_record.id_jedince, mereni_record.id);
 
     insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
         values ('HOSK1489', DATE '2021-01-01', 'vše v pořádku', 0.32, 0.16)
@@ -325,9 +327,254 @@ BEGIN
     insert into osetrovatel_mereni values (9106077256, mereni_record.id_jedince, mereni_record.id);
 
     insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
-        values ('HOSK1489', DATE '2021-03-01', 'vše v pořádku', 0.35, 0.19)
+        values ('PLRU0003', DATE '2021-01-01', 'vše v pořádku', 3.1, 115)
+        returning id_jedince, id into mereni_record;
+    insert into osetrovatel_mereni values (7663214164, mereni_record.id_jedince, mereni_record.id);
+
+    insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
+        values ('PLRU0003', DATE '2021-02-05', 'bolest křídla', 3.0, 110)
+        returning id_jedince, id into mereni_record;
+    insert into osetrovatel_mereni values (9106077256, mereni_record.id_jedince, mereni_record.id);
+
+    insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
+        values ('PLRU0003', DATE '2021-03-09', 'vše v pořádku', 2.6, 110)
+        returning id_jedince, id into mereni_record;
+    insert into osetrovatel_mereni values (8611067135, mereni_record.id_jedince, mereni_record.id);
+
+    insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
+        values ('PLRU0003', DATE '2021-03-13', 'vše v pořádku', 2.0, 100)
+        returning id_jedince, id into mereni_record;
+    insert into osetrovatel_mereni values (7663214164, mereni_record.id_jedince, mereni_record.id);
+
+    insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
+        values ('PLRU0003', DATE '2021-03-23', 'ztráta váhy, nechuť k jídlu, nečinnost, poškozené křídlo, vypadávající peří', 1.9, 109)
         returning id_jedince, id into mereni_record;
     insert into osetrovatel_mereni values (9106077256, mereni_record.id_jedince, mereni_record.id);
 END;
 /
+----------------------------------------------------------
+-- Patrani: Uhynuli jedinci
 
+-- select: Zjisti, kteri jedinci uhynuli.
+select j.id, j.jmeno, zd.nazev, j.datum_narozeni, j.datum_umrti
+    from jedinec j, zivocisny_druh zd
+    where j.datum_umrti is not null and j.zastupce_druhu = zd.nazev
+order by j.datum_umrti;
+-- Zkusme zjistit, proc jedinec 'HOSK1043' uhynul.
+-- select: Zobraz mereni jedince 'HOSK1043'
+select m.*
+    from jedinec j, mereni m
+    where j.id = m.id_jedince and j.id = 'HOSK1043';
+
+-- select: Zjisti, kdo byl primarnim osetrovatelem jedince 'HOSK1043' a jak ho je mozne kontaktovat.
+select oj.osetrovatel_id, o.jmeno, o.email, z.telefon
+    from jedinec j, osetrovatel_jedinec oj, zamestnanec z, osoba o
+    where j.id = oj.jedinec_id and j.id = 'HOSK1043' and z.id = oj.osetrovatel_id and o.id = oj.osetrovatel_id;
+
+-- select: Zjisti, kteri osetrovatele provadeli mereni jedince 'HOSK1043' a kontakt na ne.
+select unique om.osetrovatel_id, o.jmeno, o.email, z.telefon
+    from jedinec j, osetrovatel_mereni om, zamestnanec z, osoba o
+    where j.id = om.jedinec_id and j.id = 'HOSK1043' and z.id = om.osetrovatel_id and o.id = om.osetrovatel_id;
+
+-- select: Zjisti, kteri ze zamestnancu provadejicich mereni na 'HOSK1043' provadeli take mereni na ostatnich uhynulych zviratech
+select unique om.osetrovatel_id, o.jmeno, o.email, z.telefon, j.id, j.jmeno, j.datum_narozeni, j.datum_umrti
+    from jedinec j, osetrovatel_mereni om, zamestnanec z, osoba o
+    where j.datum_umrti is not null and j.id<>'HOSK1043' and om.jedinec_id = j.id and om.osetrovatel_id = z.id and
+          z.id = o.id and om.osetrovatel_id in (
+            select unique om2.osetrovatel_id
+                from jedinec j2, osetrovatel_mereni om2, zamestnanec z2, osoba o2
+                where j2.id = om2.jedinec_id and j2.id = 'HOSK1043' and z2.id = om2.osetrovatel_id and o2.id = om2.osetrovatel_id
+        );
+
+-- select: Podivejme se na dana mereni jedince 'PLRU0003'.
+select m.*, om.osetrovatel_id, o.jmeno
+    from jedinec j, mereni m, osetrovatel_mereni om, osoba o
+    where j.datum_umrti is not null and j.id<>'HOSK1043' and m.id_jedince = j.id and om.jedinec_id = j.id and
+          om.mereni_id = m.id and om.osetrovatel_id = o.id and om.osetrovatel_id in (
+            select unique om2.osetrovatel_id
+                from jedinec j2, osetrovatel_mereni om2, zamestnanec z2, osoba o2
+                where j2.id = om2.jedinec_id and j2.id = 'HOSK1043' and z2.id = om2.osetrovatel_id and o2.id = om2.osetrovatel_id
+        )
+    order by m.datum_mereni;
+
+-- Pockat, proc si osetrovatel '7663214164' nevsiml vyrazne ztraty vahy, zrejmych potizi s kridlem a dalsich problemu?
+-- To vypada na zanedbani pracovnich povinonsti vedoucich az k uhynuti jedince 'PLRU0003'.
+
+-- select: Kolik dalsich mereni provedl zamestnanec '7663214164' u kterych jedincu?
+select j.id, j.jmeno, j.zastupce_druhu, count(*) as pocet_mereni
+    from jedinec j, zivocisny_druh zd, mereni m, osetrovatel_mereni om
+    where j.id<>'HOSK1043' and j.zastupce_druhu = zd.nazev and m.id_jedince = j.id and om.jedinec_id = j.id and om.mereni_id = m.id and
+          om.osetrovatel_id = '7663214164'
+    group by j.id, j.jmeno, j.zastupce_druhu;
+-- select: Pro kolik zivych jedincu je osetrovatel '7663214164' jejich primarnim osetrovatelem?
+select count(*) as pocet_jedincu
+    from jedinec j, osetrovatel_jedinec oj
+    where j.datum_umrti is null and oj.osetrovatel_id = '7663214164' and oj.jedinec_id = j.id;
+
+-- select: Ktere jedince osetrovatel '7663214164' meri nebo je jejich primarnim osetrovatelem?
+select unique j.id, j.jmeno, j.zastupce_druhu
+    from jedinec j, zivocisny_druh zd, mereni m, osetrovatel_mereni om, osetrovatel_jedinec oj
+    where j.datum_umrti is null and j.zastupce_druhu = zd.nazev and ((m.id_jedince = j.id and om.jedinec_id = j.id and om.mereni_id = m.id and
+          om.osetrovatel_id = '7663214164') or (oj.osetrovatel_id = '7663214164' and oj.jedinec_id = j.id));
+-- Mozna by se o tyto jedince mel postarat nekdo jiny...
+
+-- Konec patrani: Uhynuli jedinci
+----------------------------------------------------------
+
+-- select: Kolik kleci/akvarii/terarii se celkem nachazi ve vsech pavilonech serazenych sestupne?
+select typ, count(*) as pocet_pozic_daneho_typu
+    from pozice
+    where typ<>'vybeh' and pavilon is not null
+    group by typ
+    order by pocet_pozic_daneho_typu desc;
+
+-- select: vsechny zamestnance
+SELECT * 
+FROM zamestnanec
+join osoba on osoba.id = zamestnanec.id;
+
+-- select: vsechny osetrovatele
+select * 
+from zamestnanec
+join osoba on osoba.id = zamestnanec.id
+where zamestnanec.typ = 'osetrovatel';
+
+-- select: vsechny udrzbare
+select * 
+from zamestnanec
+join osoba on osoba.id = zamestnanec.id
+where zamestnanec.typ = 'udrzbar';
+
+-- select: spravce
+select * 
+from zamestnanec
+join osoba on osoba.id = zamestnanec.id
+where zamestnanec.typ = 'spravce';
+
+-- select: jmeno a typ zamestnancu, jejichz nadrizeny je David Mihola, a serad je podle typu sestupne (predpokladame, ze David Mihola je jedniny)
+select osoba.jmeno, zamestnanec.typ
+from zamestnanec
+join osoba on osoba.id = zamestnanec.id
+where zamestnanec.nadrizeny = 
+    (select zamestnanec.id
+     from osoba
+     join zamestnanec on osoba.id = zamestnanec.id
+     where osoba.jmeno = 'David Mihola')
+order by zamestnanec.typ desc;
+
+-- select: pocet zamestnancu, kteri maji email u seznam.cz nebo gmail.com
+select count(*) as pocet
+from zamestnanec
+join osoba on osoba.id = zamestnanec.id
+where osoba.email like '%@seznam.cz' or osoba.email like '%@gmail.com';
+
+-- select: jmeno zamestnance a jedince, u ktereho zamestnanec provadel mereni a datum tohoto mereni
+select distinct osoba.jmeno as "jmeno osoby", jedinec.jmeno as "jmeno jedince", mereni.datum_mereni
+from osoba
+join osetrovatel_mereni on osetrovatel_mereni.osetrovatel_id = osoba.id
+join jedinec on jedinec.id = osetrovatel_mereni.jedinec_id
+join mereni on mereni.id = osetrovatel_mereni.mereni_id
+order by osoba.jmeno;
+
+-- select: jmena zamestnancu, jmena jedincu a data mereni spojena na jeden radek u zamestnancu, 
+-- kteri provedli aspon 4 mereni (mohla byt na stejnem zivocichovi)
+select tab.osoba_jmeno as "jmeno osoby", tab.jedinec_jmeno as "jmeno jedince", 
+listagg(tab.datum_mereni, ', ') within group (order by tab.datum_mereni) as "data mereni"
+from (select distinct osoba.jmeno as osoba_jmeno, jedinec.jmeno as jedinec_jmeno, mereni.datum_mereni
+      from osoba
+      join osetrovatel_mereni on osetrovatel_mereni.osetrovatel_id = osoba.id
+      join jedinec on jedinec.id = osetrovatel_mereni.jedinec_id
+      join mereni on mereni.id = osetrovatel_mereni.mereni_id
+      where osoba.id in 
+          (select osetrovatel_id
+          from osetrovatel_mereni
+          group by osetrovatel_id
+          having count(osetrovatel_mereni.osetrovatel_id) > 3)) tab
+group by tab.osoba_jmeno, tab.jedinec_jmeno
+order by tab.osoba_jmeno;
+
+-- select: jmena zamestnancu a jmena jedincu u jedincu, kteri byli mereni aspon 3 osetrovateli
+select distinct osoba.jmeno as "jmeno osoby", jedinec.jmeno as "jmeno jedince"
+from jedinec
+join osetrovatel_mereni on osetrovatel_mereni.jedinec_id = jedinec.id
+join osoba on osoba.id = osetrovatel_mereni.osetrovatel_id
+where jedinec.id in 
+    (select jedinec_id
+    from osetrovatel_mereni
+    group by jedinec_id
+    having count(distinct osetrovatel_mereni.osetrovatel_id) > 2)
+order by osoba.jmeno;
+
+-- select: jmena zamestnancu a jmena jedincu u zamestnancu, kteri provedli mereni aspon na 4 zivocisich
+select distinct osoba.jmeno as "jmeno osoby", jedinec.jmeno as "jmeno jedince"
+from osoba
+join osetrovatel_mereni on osetrovatel_mereni.osetrovatel_id = osoba.id
+join jedinec on jedinec.id = osetrovatel_mereni.jedinec_id
+where osoba.id in 
+    (select osetrovatel_id
+    from osetrovatel_mereni
+    group by osetrovatel_id
+    having count(distinct osetrovatel_mereni.jedinec_id) > 3)
+order by osoba.jmeno;
+
+-- select: castku, kterou zoo vyplati mesicne zamestnancum
+select sum(zamestnanec.plat) as vyplaty
+from zamestnanec;
+
+-- select: castku, kterou zoo vyplati mesicne vsem zamestnancum dohromady, udrzbarum zvast, osetrovatelum zvlast a spravci zvlast
+select sum(zamestnanec.plat) as "vyplaty", sum(udrzbar.plat) as "vypalty udrzbaru", 
+sum(osetrovatel.plat) as "vyplaty osetrovatelu", sum(spravce.plat) as "plat spravce"
+from zamestnanec
+left join (select zamestnanec.id, zamestnanec.plat
+      from zamestnanec
+      where zamestnanec.typ = 'udrzbar') udrzbar on udrzbar.id = zamestnanec.id
+left join (select zamestnanec.id, zamestnanec.plat
+      from zamestnanec
+      where zamestnanec.typ = 'osetrovatel') osetrovatel on osetrovatel.id = zamestnanec.id
+left join (select zamestnanec.id, zamestnanec.plat
+      from zamestnanec
+      where zamestnanec.typ = 'spravce') spravce on spravce.id = zamestnanec.id;
+
+-- select: vsechny zamestnance, kteri nemaji zadnou kvalifikaci
+select osoba.jmeno, zamestnanec.typ as "pozice"
+from osoba
+join zamestnanec on zamestnanec.id = osoba.id
+where not exists (
+    select *
+    from zamestnanec_kvalifikace
+    where zamestnanec_kvalifikace.zamestnanec_id = osoba.id
+);
+
+-- select: jmena zamestnanecu a jejich pracovni pozice, u osetrovatelu jmena jedincu, ktere osetruji, a u udrzbaru id pozic, ktere udrzuji
+select osoba.jmeno, zamestnanec.typ as "pozice", udrzbar_pozice.pozice_id as "udrzuje", jedinec.jmeno as "osetruje"
+from osoba
+left join udrzbar_pozice on udrzbar_pozice.udrzbar_id = osoba.id
+left join osetrovatel_jedinec on osetrovatel_jedinec.osetrovatel_id = osoba.id
+left join jedinec on jedinec.id = osetrovatel_jedinec.jedinec_id
+join zamestnanec on zamestnanec.id = osoba.id;
+
+-- select: jmena zamestnancu a jejich pracovni pozice, u osetrovatelu jmena jedincu, ktere osetruji, spojenych do jednoho radku 
+-- a u udrzbaru id pozic, ktere udrzuji, spojenych do jednoho radku
+select tab.jmeno, tab.pozice, listagg(tab.osetruje, ', ') within group (order by tab.osetruje) as "osetruje",
+listagg(tab.udrzuje, ', ') within group (order by tab.udrzuje) as "udrzuje"
+from (select distinct osoba.jmeno, zamestnanec.typ as pozice, jedinec.jmeno as osetruje, udrzbar_pozice.pozice_id as udrzuje
+      from osoba
+      left join osetrovatel_jedinec on osetrovatel_jedinec.osetrovatel_id = osoba.id
+      left join jedinec on jedinec.id = osetrovatel_jedinec.jedinec_id
+      left join udrzbar_pozice on udrzbar_pozice.udrzbar_id = osoba.id
+      join zamestnanec on zamestnanec.id = osoba.id) tab
+group by tab.jmeno, tab.pozice
+order by tab.pozice;
+
+-- select: vsechny navstevniky
+select * 
+from navstevnik
+join osoba on osoba.id = navstevnik.id;
+
+-- select: id a jmena zamestnancu, kteri jsou zaroven registrovani i jako zakaznici
+select osoba.id, osoba.jmeno
+from zamestnanec
+join osoba on osoba.id = zamestnanec.id
+where exists (select *
+              from navstevnik
+              where zamestnanec.id = navstevnik.id);
