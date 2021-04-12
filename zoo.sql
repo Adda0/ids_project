@@ -154,7 +154,7 @@ insert into pozice (id, prostredi, datum_udrzby, typ, objem, pavilon)
 insert into pozice (id, prostredi, datum_udrzby, typ, objem, pavilon)
     values ('KPT026N', 'Oceán', DATE '2007-05-14', 'klec', 12, null);
 insert into pozice (id, prostredi, datum_udrzby, typ, objem, pavilon)
-    values ('KKO402D', 'Asie', DATE '2010-04-26', 'klec', 30, 'KO174H');
+    values ('KKO402D', 'asie', DATE '2010-04-26', 'klec', 30, 'KO174H');
 insert into pozice (id, prostredi, datum_udrzby, typ, objem, pavilon)
     values ('KTR123B', 'Brazílie', DATE '2002-05-30', 'klec', 25, 'TR058R');
 insert into pozice (id, prostredi, datum_udrzby, typ, plocha)
@@ -165,9 +165,9 @@ insert into pozice (id, prostredi, datum_udrzby, typ, plocha)
     values ('aVME743A', 'arktický', DATE '2021-04-15', 'výběh', 320);
 
 -- insert 'zivocisny_druh' records
-insert into zivocisny_druh values ('lev pustinný', 'Lev je po tygrovi druhá největší kočkovitá šelma. U lvů se projevuje výrazný pohlavní dimorfismus, hlavním a určujícím rysem lvích samců je jejich hříva. Samci váží 150–250 kg a samice 90–165 kg. V divočině se lvi dožívají 10–14 let, kdežto v zajetí se mohou dožít i věku 20 let. Dříve se lvi vyskytovali v celé Africe, ve velké části Asie, v Evropě a dokonce i v Americe, dnes se vyskytují pouze v Africe a v nevelké části Indie. Jsou to společenská zvířata a loví ve smečkách. Jejich nejčastější kořistí jsou velcí savci, především kopytníci. Mezinárodní svaz ochrany přírody hodnotí lva jako zranitelný druh.');
+insert into zivocisny_druh values ('lev pustinný', 'Lev je po tygrovi druhá největší kočkovitá šelma. U lvů se projevuje výrazný pohlavní dimorfismus, hlavním a určujícím rysem lvích samců je jejich hříva. Samci váží 150–250 kg a samice 90–165 kg. V divočině se lvi dožívají 10–14 let, kdežto v zajetí se mohou dožít i věku 20 let. Dříve se lvi vyskytovali v celé Africe, ve velké části asie, v Evropě a dokonce i v Americe, dnes se vyskytují pouze v Africe a v nevelké části Indie. Jsou to společenská zvířata a loví ve smečkách. Jejich nejčastější kořistí jsou velcí savci, především kopytníci. Mezinárodní svaz ochrany přírody hodnotí lva jako zranitelný druh.');
 insert into zivocisny_druh values ('levhart skvrnitý', 'Levhart je statná kočkovitá šelma s velkou hlavou, středně dlouhými končetinami a dlouhým ocasem. Velmi se podobá jaguárovi, který je však robustnější, má relativně kratší ocas a větší rozety. Hmotnost dospělých jedinců se pohybuje od 17 kg do 90 kg, délka těla včetně ocasu od 140 cm do 240 cm, výjimečně i více.');
-insert into zivocisny_druh values ('tygr ussurijský', 'Tygr je velká kočkovitá šelma žijící v Asii. Ze současných kočkovitých šelem je největší a díky charakteristickým tmavým pruhům na zlatožluté či rudohnědé srsti nezaměnitelný. Dříve byl druh rozdělován do 9 poddruhů, v současné době jsou rozeznávány pouze 2 poddruhy. Někteří tygři běžně dosahují délky trupu přes 2 m, délka ocasu bývá až 90 cm a váha samců mnohdy více než 200 kg; samice jsou výrazně menší, dosahují váhy maximálně kolem 130 kg.');
+insert into zivocisny_druh values ('tygr ussurijský', 'Tygr je velká kočkovitá šelma žijící v asii. Ze současných kočkovitých šelem je největší a díky charakteristickým tmavým pruhům na zlatožluté či rudohnědé srsti nezaměnitelný. Dříve byl druh rozdělován do 9 poddruhů, v současné době jsou rozeznávány pouze 2 poddruhy. Někteří tygři běžně dosahují délky trupu přes 2 m, délka ocasu bývá až 90 cm a váha samců mnohdy více než 200 kg; samice jsou výrazně menší, dosahují váhy maximálně kolem 130 kg.');
 
 insert into zivocisny_druh values ('holub skalní', 'Středně velký pták s kratším ocasem, velký jako domácí holub, délka těla 31-35 cm. V původním divokém zbarvení je šedý s lesklou fialovou hrudí a lesklým zeleným krkem a s výraznými černými pruhy na křídlech. Ocas je modrošedý se širokým načernalým lemem na konci, kostřec je bílý, zobák je matně šedý s bělavým ozobím. Mezi samcem a samicí nejsou výrazné rozdíly ve vzhledu ani ve velikosti. Mláďata jsou více hnědá, prachový šat je smetanově žlutý.');
 insert into zivocisny_druh values ('plameňák růžový', 'Mají dvě dlouhé růžové nohy, které mají mezi krátkými prsty plovací blány. Tělo je růžovobílé, s nohama průměrně 120 – 140 cm vysoké a dosahuje hmotnosti 2100-4100 g. Dlouhý krk a hlava jsou čistě růžové, mnohdy i dočervena. Je dokázáno, že mají oko větší než mozek. Mají také dlouhá, výrazně zbarvená křídla, která dosahují rozpětí 140-170 cm. Obě pohlaví se od sebe liší pouze velikostí, samec je v průměru o cca 1/5 větší. Jejich zvláštně vyvinutý a tvarovaný zobák jim umožňuje vyhledávat a filtrovat potravu z mělké vody. Zobák přitom drží tak, aby byl horizontálně ponořen do vody. Proud vody protéká zobákem a plameňák tiskne svůj masitý jazyk na vláknité lamely, jež zachytí částečky potravy, kterou se stává jak živočišný, tak rostlinný plankton; přijmutá voda poté odteče po stranách zobáku ven.');
@@ -201,7 +201,7 @@ insert into jedinec values ('HOSK1489', 'Petr', DATE '2020-09-04', null, 'holub 
 insert into jedinec values ('REOS044', 'Mak', DATE '2018-09-01', DATE '2020-10-17', 'rejnok ostnatý', null);
 insert into jedinec values ('REOS045', 'Boko', DATE '2018-09-04', null, 'rejnok ostnatý', 'Ann006K');
 
-insert into jedinec values ('MASK002', 'Macko', DATE '2019-06-30', null, 'máčka skvrnitá', 'Ann006K');
+insert into jedinec values ('MasK002', 'Macko', DATE '2019-06-30', null, 'máčka skvrnitá', 'Ann006K');
 
 insert into jedinec values ('ARAR001', 'Petr', DATE '2020-06-15', null, 'ara arakanga', 'KTR123B');
 insert into jedinec values ('ALST421', 'Petr', DATE '2019-07-24', null, 'albatros stěhovavý', 'KPT026N');
@@ -293,8 +293,8 @@ insert into udrzbar_pozice values (9611251334, 'KPT001M');
 -- insert 'mereni' and 'osetrovatel_mereni' records
 DECLARE
     type mereni_record_t is record (
-        id_jedince mereni.id_jedince%TYPE,
-        id mereni.id%TYPE
+        id_jedince mereni.id_jedince%typE,
+        id mereni.id%typE
     );
     mereni_record mereni_record_t;
 BEGIN
@@ -431,148 +431,151 @@ select typ, count(*) as pocet_pozic_daneho_typu
     order by pocet_pozic_daneho_typu desc;
 
 -- select: zamestnanec
-SELECT * 
-FROM zamestnanec
-join osoba on osoba.ID = zamestnanec.ID;
+select * 
+from zamestnanec
+join osoba on osoba.id = zamestnanec.id;
 
 -- select: vsechny osetrovatele
-SELECT * 
-FROM zamestnanec
-join osoba on osoba.ID = zamestnanec.ID
-where zamestnanec.TYP = 'osetrovatel';
+select * 
+from zamestnanec
+join osoba on osoba.id = zamestnanec.id
+where zamestnanec.typ = 'osetrovatel';
 
 -- select: vsechny udrzbare
-SELECT * 
-FROM zamestnanec
-join osoba on osoba.ID = zamestnanec.ID
-where zamestnanec.TYP = 'udrzbar';
+select * 
+from zamestnanec
+join osoba on osoba.id = zamestnanec.id
+where zamestnanec.typ = 'udrzbar';
 
 -- select: spravce
-SELECT * 
-FROM zamestnanec
-join osoba on osoba.ID = zamestnanec.ID
-where zamestnanec.TYP = 'spravce';
+select * 
+from zamestnanec
+join osoba on osoba.id = zamestnanec.id
+where zamestnanec.typ = 'spravce';
 
--- select: jmeno a typ zamestnancu, jejich nadrizeny je David Mihola a serad je podle typu (predpokladame, ze David Mihola je jedniny)
-SELECT osoba.JMENO, zamestnanec.TYP
-FROM zamestnanec
-join osoba on osoba.ID = zamestnanec.ID
-where zamestnanec.NADRIZENY = 
-    (SELECT zamestnanec.ID
-     FROM osoba
-     join zamestnanec on osoba.ID = zamestnanec.ID
-     where osoba.JMENO = 'David Mihola')
-order by zamestnanec.TYP ASC;
+-- select: jmeno a typ zamestnancu, jejich nadrizeny je David Mihola a serad je podle typu sestupne (predpokladame, ze David Mihola je jedniny)
+select osoba.jmeno, zamestnanec.typ
+from zamestnanec
+join osoba on osoba.id = zamestnanec.id
+where zamestnanec.nadrizeny = 
+    (select zamestnanec.id
+     from osoba
+     join zamestnanec on osoba.id = zamestnanec.id
+     where osoba.jmeno = 'David Mihola')
+order by zamestnanec.typ desc;
 
 -- select: pocet zamestnancu, kteri maji email u seznam.cz nebo gmail.com
-SELECT COUNT(*) AS pocet
+select count(*) as pocet
 from zamestnanec
-join osoba on osoba.ID = zamestnanec.ID
-where osoba.EMAIL LIKE '%@seznam.cz' or osoba.EMAIL LIKE '%@gmail.com';
+join osoba on osoba.id = zamestnanec.id
+where osoba.email like '%@seznam.cz' or osoba.email like '%@gmail.com';
 
--- select: jmeno zamestnance a zivosicha, u ktereho zamestnanec provadel mereni a datum tohoto mereni
-SELECT DISTINCT osoba.JMENO as "jmeno osoby", jedinec.JMENO as "jmeno jedince", mereni.DATUM_MERENI
+-- select: jmeno zamestnance a jedince, u ktereho zamestnanec provadel mereni a datum tohoto mereni
+select distinct osoba.jmeno as "jmeno osoby", jedinec.jmeno as "jmeno jedince", mereni.datum_mereni
 from osoba
-join osetrovatel_mereni on osetrovatel_mereni.OSETROVATEL_ID = osoba.ID
-join jedinec on jedinec.ID = osetrovatel_mereni.JEDINEC_ID
-join mereni on mereni.ID = osetrovatel_mereni.MERENI_ID
-order by osoba.JMENO;
+join osetrovatel_mereni on osetrovatel_mereni.osetrovatel_id = osoba.id
+join jedinec on jedinec.id = osetrovatel_mereni.jedinec_id
+join mereni on mereni.id = osetrovatel_mereni.MERENI_id
+order by osoba.jmeno;
 
--- select: jmena zamestnancu, zivocihu a data mereni u zamestnancu, kteri provedli aspon 4 mereni (mohla byt na stejnem zivocichovi)
-SELECT DISTINCT osoba.JMENO as "jmeno osoby", jedinec.JMENO as "jmeno jedince", mereni.DATUM_MERENI
-from osoba
-join osetrovatel_mereni on osetrovatel_mereni.OSETROVATEL_ID = osoba.ID
-join jedinec on jedinec.ID = osetrovatel_mereni.JEDINEC_ID
-join mereni on mereni.ID = osetrovatel_mereni.MERENI_ID
-where osoba.ID in 
-    (SELECT OSETROVATEL_ID
-    from osetrovatel_mereni
-    GROUP by OSETROVATEL_ID
-    HAVING COUNT(osetrovatel_mereni.OSETROVATEL_ID) > 4)
-order by osoba.JMENO;
+-- select: jmena zamestnancu, jmena jedincu a data mereni (agregovane) u zamestnancu, kteri provedli aspon 4 mereni (mohla byt na stejnem zivocichovi)
+select tab.osoba_jmeno as "jmeno osoby", tab.jedinec_jmeno as "jmeno jedince", 
+listagg(tab.datum_mereni, ', ') within group (order by tab.datum_mereni) as "data mereni"
+from (select distinct osoba.jmeno as osoba_jmeno, jedinec.jmeno as jedinec_jmeno, mereni.datum_mereni
+      from osoba
+      join osetrovatel_mereni on osetrovatel_mereni.osetrovatel_id = osoba.id
+      join jedinec on jedinec.id = osetrovatel_mereni.jedinec_id
+      join mereni on mereni.id = osetrovatel_mereni.MERENI_id
+      where osoba.id in 
+          (select osetrovatel_id
+          from osetrovatel_mereni
+          group by osetrovatel_id
+          having count(osetrovatel_mereni.osetrovatel_id) > 3)) tab
+group by tab.osoba_jmeno, tab.jedinec_jmeno
+order by tab.osoba_jmeno;
 
--- select: jmena zamestnancu, jmena jedincu a data mereni u zivocichu, kteri byli mereni aspon 3 osetrovateli
-SELECT DISTINCT osoba.JMENO as "jmeno osoby", jedinec.JMENO as "jmeno jedince", mereni.DATUM_MERENI
+-- select: jmena zamestnancu a jmena jedincu u jedincu, kteri byli mereni aspon 3 osetrovateli
+select distinct osoba.jmeno as "jmeno osoby", jedinec.jmeno as "jmeno jedince"
 from jedinec
-join osetrovatel_mereni on osetrovatel_mereni.JEDINEC_ID = jedinec.ID
-join osoba on osoba.ID = osetrovatel_mereni.OSETROVATEL_ID
-join mereni on mereni.ID = osetrovatel_mereni.MERENI_ID
-where jedinec.ID in 
-    (SELECT JEDINEC_ID
+join osetrovatel_mereni on osetrovatel_mereni.jedinec_id = jedinec.id
+join osoba on osoba.id = osetrovatel_mereni.osetrovatel_id
+where jedinec.id in 
+    (select jedinec_id
     from osetrovatel_mereni
-    GROUP by JEDINEC_ID
-    HAVING COUNT(DISTINCT osetrovatel_mereni.OSETROVATEL_ID) > 2)
-order by osoba.JMENO;
+    group by jedinec_id
+    having count(distinct osetrovatel_mereni.osetrovatel_id) > 2)
+order by osoba.jmeno;
 
--- select: jmena zamestnancu, jmena jedincu a data mereni u zamestnancu, kteri provedli mereni aspon na 4 zivocisich
-SELECT DISTINCT osoba.JMENO as "jmeno osoby", jedinec.JMENO as "jmeno jedince", mereni.DATUM_MERENI
+-- select: jmena zamestnancu a jmena jedincu u zamestnancu, kteri provedli mereni aspon na 4 zivocisich
+select distinct osoba.jmeno as "jmeno osoby", jedinec.jmeno as "jmeno jedince"
 from osoba
-join osetrovatel_mereni on osetrovatel_mereni.OSETROVATEL_ID = osoba.ID
-join jedinec on jedinec.ID = osetrovatel_mereni.JEDINEC_ID
-join mereni on mereni.ID = osetrovatel_mereni.MERENI_ID
-where osoba.ID in 
-    (SELECT OSETROVATEL_ID
+join osetrovatel_mereni on osetrovatel_mereni.osetrovatel_id = osoba.id
+join jedinec on jedinec.id = osetrovatel_mereni.jedinec_id
+where osoba.id in 
+    (select osetrovatel_id
     from osetrovatel_mereni
-    GROUP by OSETROVATEL_ID
-    HAVING COUNT(DISTINCT osetrovatel_mereni.JEDINEC_ID) > 3)
-order by osoba.JMENO;
+    group by osetrovatel_id
+    having count(distinct osetrovatel_mereni.jedinec_id) > 3)
+order by osoba.jmeno;
 
 -- select: castku, kterou zoo vyplati mesicne zamestnancum
-SELECT SUM(zamestnanec.PLAT) as vyplaty
+select sum(zamestnanec.plat) as vyplaty
 from zamestnanec;
 
 -- select: castku, kterou zoo vyplati mesicne vsem zamestnancum dohromady, udrzbarum zvast, osetrovatelum zvlast a spravci zvlast
-SELECT SUM(zamestnanec.PLAT) as "vyplaty", SUM(udrzbar.PLAT) as "vypalty udrzbaru", SUM(osetrovatel.PLAT) as "vyplaty osetrovatelu", SUM(spravce.PLAT) as "plat spravce"
+select sum(zamestnanec.plat) as "vyplaty", sum(udrzbar.plat) as "vypalty udrzbaru", 
+sum(osetrovatel.plat) as "vyplaty osetrovatelu", sum(spravce.plat) as "plat spravce"
 from zamestnanec
-left join (SELECT zamestnanec.ID, zamestnanec.PLAT
+left join (select zamestnanec.id, zamestnanec.plat
       from zamestnanec
-      where zamestnanec.TYP = 'udrzbar') udrzbar on udrzbar.ID = zamestnanec.ID
-left join (SELECT zamestnanec.ID, zamestnanec.PLAT
+      where zamestnanec.typ = 'udrzbar') udrzbar on udrzbar.id = zamestnanec.id
+left join (select zamestnanec.id, zamestnanec.plat
       from zamestnanec
-      where zamestnanec.TYP = 'osetrovatel') osetrovatel on osetrovatel.ID = zamestnanec.ID
-left join (SELECT zamestnanec.ID, zamestnanec.PLAT
+      where zamestnanec.typ = 'osetrovatel') osetrovatel on osetrovatel.id = zamestnanec.id
+left join (select zamestnanec.id, zamestnanec.plat
       from zamestnanec
-      where zamestnanec.TYP = 'spravce') spravce on spravce.ID = zamestnanec.ID;
+      where zamestnanec.typ = 'spravce') spravce on spravce.id = zamestnanec.id;
 
 -- select: vsechny zamestnance, kteri nemaji zadnou kvalifikaci
-SELECT osoba.JMENO, zamestnanec.TYP as "pozice"
+select osoba.jmeno, zamestnanec.typ as "pozice"
 from osoba
-join zamestnanec on zamestnanec.ID = osoba.ID
-WHERE not EXISTS (
-    SELECT *
+join zamestnanec on zamestnanec.id = osoba.id
+where not EXISTS (
+    select *
     from zamestnanec_kvalifikace
-    WHERE zamestnanec_kvalifikace.zamestnanec_id = osoba.ID
+    where zamestnanec_kvalifikace.zamestnanec_id = osoba.id
 );
 
--- select: jmena zamestnanecu a jejich pracovni pozice, u osetrovatelu jmena jedincu, ktere osetruji, a u udrzbaru ID pozic, ktere udrzuji
-SELECT osoba.JMENO, zamestnanec.TYP as "pozice", udrzbar_pozice.POZICE_ID as "udrzuje", jedinec.JMENO as "osetruje"
+-- select: jmena zamestnanecu a jejich pracovni pozice, u osetrovatelu jmena jedincu, ktere osetruji, a u udrzbaru id pozic, ktere udrzuji
+select osoba.jmeno, zamestnanec.typ as "pozice", udrzbar_pozice.pozice_id as "udrzuje", jedinec.jmeno as "osetruje"
 from osoba
-left join udrzbar_pozice on udrzbar_pozice.UDRZBAR_ID = osoba.ID
-left join osetrovatel_jedinec on osetrovatel_jedinec.OSETROVATEL_ID = osoba.ID
-left join jedinec on jedinec.ID = osetrovatel_jedinec.JEDINEC_ID
-join zamestnanec on zamestnanec.ID = osoba.ID;
+left join udrzbar_pozice on udrzbar_pozice.udrzbar_id = osoba.id
+left join osetrovatel_jedinec on osetrovatel_jedinec.osetrovatel_id = osoba.id
+left join jedinec on jedinec.id = osetrovatel_jedinec.jedinec_id
+join zamestnanec on zamestnanec.id = osoba.id;
 
 -- select: jmena zamestnanecu a jejich pracovni pozice, u osetrovatelu jmena jedincu, ktere osetruji, spojenych do jednoho radku 
--- a u udrzbaru ID pozic, ktere udrzuji, spojenych do jednoho radku
-SELECT tab.JMENO, tab.pozice, LISTAGG(tab.osetruje, ', ') WITHIN GROUP (ORDER BY tab.osetruje) as "osetruje",
-LISTAGG(tab.udrzuje, ', ') WITHIN GROUP (ORDER BY tab.udrzuje) as "udrzuje"
-from (SELECT DISTINCT osoba.JMENO, zamestnanec.TYP as pozice, jedinec.JMENO as osetruje, udrzbar_pozice.POZICE_ID as udrzuje
+-- a u udrzbaru id pozic, ktere udrzuji, spojenych do jednoho radku
+select tab.jmeno, tab.pozice, listagg(tab.osetruje, ', ') within group (order by tab.osetruje) as "osetruje",
+listagg(tab.udrzuje, ', ') within group (order by tab.udrzuje) as "udrzuje"
+from (select distinct osoba.jmeno, zamestnanec.typ as pozice, jedinec.jmeno as osetruje, udrzbar_pozice.pozice_id as udrzuje
       from osoba
-      left join osetrovatel_jedinec on osetrovatel_jedinec.OSETROVATEL_ID = osoba.ID
-      left join jedinec on jedinec.ID = osetrovatel_jedinec.JEDINEC_ID
-      left join udrzbar_pozice on udrzbar_pozice.UDRZBAR_ID = osoba.ID
-      join zamestnanec on zamestnanec.ID = osoba.ID) tab
-GROUP by tab.jmeno, tab.pozice;
+      left join osetrovatel_jedinec on osetrovatel_jedinec.osetrovatel_id = osoba.id
+      left join jedinec on jedinec.id = osetrovatel_jedinec.jedinec_id
+      left join udrzbar_pozice on udrzbar_pozice.udrzbar_id = osoba.id
+      join zamestnanec on zamestnanec.id = osoba.id) tab
+group by tab.jmeno, tab.pozice
+order by tab.pozice;
 
 -- select: vsechny navstevniky
-SELECT * 
-FROM navstevnik
-join osoba on osoba.ID = navstevnik.ID;
+select * 
+from navstevnik
+join osoba on osoba.id = navstevnik.id;
 
 -- select: id a jmena zamestnancu, kteri jsou zaroven registrovani i jako zakaznici
-SELECT osoba.ID, osoba.JMENO
+select osoba.id, osoba.jmeno
 from zamestnanec
-join osoba on osoba.ID = zamestnanec.ID
-where EXISTS (SELECT *
+join osoba on osoba.id = zamestnanec.id
+where EXISTS (select *
               from navstevnik
-              where zamestnanec.ID = navstevnik.ID);
+              where zamestnanec.id = navstevnik.id);
