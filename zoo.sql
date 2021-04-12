@@ -423,16 +423,16 @@ select unique j.id, j.jmeno, j.zastupce_druhu
 -- Konec patrani: Uhynuli jedinci
 ----------------------------------------------------------
 
--- select: Kolik kleci/akvarii/terarii se celkem nachazi ve vsech pavilonech?
+-- select: Kolik kleci/akvarii/terarii se celkem nachazi ve vsech pavilonech serazenych sestupne?
 select typ, count(*) as pocet_pozic_daneho_typu
     from pozice
     where typ<>'vybeh' and pavilon is not null
     group by typ
     order by pocet_pozic_daneho_typu desc;
 
--- select: zamestnanec
-select * 
-from zamestnanec
+-- select: vsechny zamestnance
+SELECT * 
+FROM zamestnanec
 join osoba on osoba.id = zamestnanec.id;
 
 -- select: vsechny osetrovatele
@@ -453,7 +453,7 @@ from zamestnanec
 join osoba on osoba.id = zamestnanec.id
 where zamestnanec.typ = 'spravce';
 
--- select: jmeno a typ zamestnancu, jejich nadrizeny je David Mihola a serad je podle typu sestupne (predpokladame, ze David Mihola je jedniny)
+-- select: jmeno a typ zamestnancu, jejichz nadrizeny je David Mihola, a serad je podle typu sestupne (predpokladame, ze David Mihola je jedniny)
 select osoba.jmeno, zamestnanec.typ
 from zamestnanec
 join osoba on osoba.id = zamestnanec.id
@@ -475,17 +475,18 @@ select distinct osoba.jmeno as "jmeno osoby", jedinec.jmeno as "jmeno jedince", 
 from osoba
 join osetrovatel_mereni on osetrovatel_mereni.osetrovatel_id = osoba.id
 join jedinec on jedinec.id = osetrovatel_mereni.jedinec_id
-join mereni on mereni.id = osetrovatel_mereni.MERENI_id
+join mereni on mereni.id = osetrovatel_mereni.mereni_id
 order by osoba.jmeno;
 
--- select: jmena zamestnancu, jmena jedincu a data mereni (agregovane) u zamestnancu, kteri provedli aspon 4 mereni (mohla byt na stejnem zivocichovi)
+-- select: jmena zamestnancu, jmena jedincu a data mereni spojena na jeden radek u zamestnancu, 
+-- kteri provedli aspon 4 mereni (mohla byt na stejnem zivocichovi)
 select tab.osoba_jmeno as "jmeno osoby", tab.jedinec_jmeno as "jmeno jedince", 
 listagg(tab.datum_mereni, ', ') within group (order by tab.datum_mereni) as "data mereni"
 from (select distinct osoba.jmeno as osoba_jmeno, jedinec.jmeno as jedinec_jmeno, mereni.datum_mereni
       from osoba
       join osetrovatel_mereni on osetrovatel_mereni.osetrovatel_id = osoba.id
       join jedinec on jedinec.id = osetrovatel_mereni.jedinec_id
-      join mereni on mereni.id = osetrovatel_mereni.MERENI_id
+      join mereni on mereni.id = osetrovatel_mereni.mereni_id
       where osoba.id in 
           (select osetrovatel_id
           from osetrovatel_mereni
@@ -554,7 +555,7 @@ left join osetrovatel_jedinec on osetrovatel_jedinec.osetrovatel_id = osoba.id
 left join jedinec on jedinec.id = osetrovatel_jedinec.jedinec_id
 join zamestnanec on zamestnanec.id = osoba.id;
 
--- select: jmena zamestnanecu a jejich pracovni pozice, u osetrovatelu jmena jedincu, ktere osetruji, spojenych do jednoho radku 
+-- select: jmena zamestnancu a jejich pracovni pozice, u osetrovatelu jmena jedincu, ktere osetruji, spojenych do jednoho radku 
 -- a u udrzbaru id pozic, ktere udrzuji, spojenych do jednoho radku
 select tab.jmeno, tab.pozice, listagg(tab.osetruje, ', ') within group (order by tab.osetruje) as "osetruje",
 listagg(tab.udrzuje, ', ') within group (order by tab.udrzuje) as "udrzuje"
