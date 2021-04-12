@@ -539,7 +539,7 @@ left join (select zamestnanec.id, zamestnanec.plat
 select osoba.jmeno, zamestnanec.typ as "pozice"
 from osoba
 join zamestnanec on zamestnanec.id = osoba.id
-where not EXISTS (
+where not exists (
     select *
     from zamestnanec_kvalifikace
     where zamestnanec_kvalifikace.zamestnanec_id = osoba.id
@@ -575,6 +575,6 @@ join osoba on osoba.id = navstevnik.id;
 select osoba.id, osoba.jmeno
 from zamestnanec
 join osoba on osoba.id = zamestnanec.id
-where EXISTS (select *
+where exists (select *
               from navstevnik
               where zamestnanec.id = navstevnik.id);
