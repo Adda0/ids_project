@@ -578,3 +578,58 @@ join osoba on osoba.id = zamestnanec.id
 where exists (select *
               from navstevnik
               where zamestnanec.id = navstevnik.id);
+
+create or replace trigger zamestnanec_je_osetrovatel
+before insert or update on osetrovatel_jedinec
+for each row
+declare
+    zamestnanec_typ varchar(15);
+begin
+    select zamestnanec.typ
+    into zamestnanec_typ
+    from zamestnanec
+    where zamestnanec.id = :NEW.osetrovatel_id;
+    
+    if zamestnanec_typ <> 'osetrovatel' then
+        raise_application_error(-1, 'Jiny zamestnanec nez osetrovatel nemuze osetrovat zivosichy.');
+    end if;
+end;
+/
+insert into osetrovatel_jedinec values (8611067135, 'VLAR0001');
+
+create sequence osoba_id start with 1;
+
+create or replace trigger osoba_id_inkrement
+before insert or update on osoba
+for each row
+declare
+    pocet int;
+begin
+    if :NEW.id is null then
+        select osoba_id.nextval
+        into :NEW.id
+        from dual;
+
+        select count(*)
+        into pocet
+        from osoba
+        where osoba.id = :NEW.id;
+
+        while pocet > 0 loop
+            select osoba_id.nextval
+            into :NEW.id
+            from dual;
+            
+            select count(*)
+            into pocet
+            from osoba
+            where osoba.id = :NEW.id;
+        end loop;
+    end if;
+end;
+/
+insert into osoba(jmeno, adresa, email) values ('Marie Velká', 'Poděbrady, 269 16', 'velkamarie@centrum.cz');
+
+select *
+from osoba;
+
