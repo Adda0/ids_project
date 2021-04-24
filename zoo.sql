@@ -633,3 +633,61 @@ insert into osoba(jmeno, adresa, email) values ('Marie Velká', 'Poděbrady, 269
 select *
 from osoba;
 
+create or replace procedure navyseni_platu(procento in zamestnanec.plat%type) is
+    zid zamestnanec.id%type;
+    plat zamestnanec.plat%type;
+    navyseni zamestnanec.plat%type;
+    celkove_navyseni zamestnanec.plat%type;
+    jmeno osoba.jmeno%type;
+    cursor zamestnanec_cursor is 
+        select zamestnanec.id, jmeno, plat 
+        from zamestnanec
+        join osoba on osoba.id = zamestnanec.id;
+begin
+    celkove_navyseni := 0;
+    open zamestnanec_cursor;
+    loop
+        fetch zamestnanec_cursor into zid, jmeno, plat;
+        exit when zamestnanec_cursor%notfound;
+
+        navyseni := plat * (procento / 100);
+        celkove_navyseni := celkove_navyseni + navyseni;
+        dbms_output.put_line('plat zamestnance ' || jmeno || ' navysen o ' || navyseni);
+        update zamestnanec
+        set plat = plat + navyseni
+        where zamestnanec.id = zid;
+    end loop;
+    dbms_output.put_line('celkove navyseni paltu cini: ' || celkove_navyseni);
+end;
+/
+
+select osoba.id as "ID", jmeno, plat
+from zamestnanec
+join osoba on osoba.id = zamestnanec.id;
+
+execute navyseni_platu(8);
+
+select osoba.id as "ID", jmeno, plat
+from zamestnanec
+join osoba on osoba.id = zamestnanec.id;
+
+create or replace procedure zmena_uctu(zid in zamestnanec.id%type, nove_cislo_uctu in zamestnanec.cislo_uctu%type) is
+  check_constraint_exception exception;
+  pragma exception_init(check_constraint_exception, -2290);
+begin
+    update zamestnanec
+    set zamestnanec.cislo_uctu = nove_cislo_uctu
+    where zamestnanec.id = zid;
+exception
+    when check_constraint_exception then
+        dbms_output.put_line('neplatne cislo uctu: ' || nove_cislo_uctu);
+    when others then
+        dbms_output.put_line('nespecifikovana chyba' || SQLCODE || ' : ' || SQLERRM);
+end;
+/
+
+execute zmena_uctu(9910244245, 'test');
+
+select *
+from zamestnanec;
+
