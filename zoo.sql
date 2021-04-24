@@ -11,6 +11,11 @@ drop table zamestnanec_kvalifikace cascade constraints;
 drop table osetrovatel_jedinec cascade constraints;
 drop table osetrovatel_mereni cascade constraints;
 drop table udrzbar_pozice cascade constraints;
+drop trigger zamestnanec_je_osetrovatel;
+drop trigger osoba_id_inkrement;
+drop sequence osoba_id;
+drop index osoba_jmeno_index;
+drop index jedinec_jmeno_index;
 
 create table pavilon (
     id varchar(10) primary key,
@@ -685,9 +690,79 @@ exception
         dbms_output.put_line('nespecifikovana chyba' || SQLCODE || ' : ' || SQLERRM);
 end;
 /
-
 execute zmena_uctu(9910244245, 'test');
 
 select *
 from zamestnanec;
 
+-- index
+delete from PLAN_TABLE;
+
+explain plan for
+    select jedinec.id, jedinec.jmeno, count(*) as pocet_mereni
+        from jedinec, mereni, osetrovatel_mereni, osoba
+        where (jedinec.jmeno = 'Felix' or jedinec.jmeno = 'Noam' or jedinec.jmeno = 'Petroslav' or jedinec.jmeno = 'Petr') and 
+              (osoba.jmeno = 'Jaroslava Mladá' or osoba.jmeno = 'Vlasta Lajdová') and osoba.id = osetrovatel_mereni.osetrovatel_id and 
+              mereni.id_jedince = jedinec.id and osetrovatel_mereni.mereni_id = mereni.id
+        group by jedinec.id, jedinec.jmeno;
+
+select *
+from PLAN_TABLE
+order by PLAN_TABLE.PLAN_ID;
+
+-- prvni urychleni - pouzitim indexu pro jmeno osoby
+create index osoba_jmeno_index
+on osoba (jmeno);
+
+explain plan for
+    select jedinec.id, jedinec.jmeno, count(*) as pocet_mereni
+        from jedinec, mereni, osetrovatel_mereni, osoba
+        where (jedinec.jmeno = 'Felix' or jedinec.jmeno = 'Noam' or jedinec.jmeno = 'Petroslav' or jedinec.jmeno = 'Petr') and 
+              (osoba.jmeno = 'Jaroslava Mladá' or osoba.jmeno = 'Vlasta Lajdová') and osoba.id = osetrovatel_mereni.osetrovatel_id and 
+              mereni.id_jedince = jedinec.id and osetrovatel_mereni.mereni_id = mereni.id
+        group by jedinec.id, jedinec.jmeno;
+
+select *
+from PLAN_TABLE
+order by PLAN_TABLE.PLAN_ID;
+
+-- druhe urychleni - pouziti indexu i pro jmeno jedince -- TODO chtelo by to neco lepsiho...
+create index jedinec_jmeno_index
+on jedinec (jmeno);
+
+explain plan for
+    select jedinec.id, jedinec.jmeno, count(*) as pocet_mereni
+        from jedinec, mereni, osetrovatel_mereni, osoba
+        where (jedinec.jmeno = 'Felix' or jedinec.jmeno = 'Noam' or jedinec.jmeno = 'Petroslav' or jedinec.jmeno = 'Petr') and 
+              (osoba.jmeno = 'Jaroslava Mladá' or osoba.jmeno = 'Vlasta Lajdová') and osoba.id = osetrovatel_mereni.osetrovatel_id and 
+              mereni.id_jedince = jedinec.id and osetrovatel_mereni.mereni_id = mereni.id
+        group by jedinec.id, jedinec.jmeno;
+
+select *
+from PLAN_TABLE
+order by PLAN_TABLE.PLAN_ID;
+
+--explain plan for -- stejny vysledek jako select predtim
+--select jedinec.id, jedinec.jmeno, count(*) as pocet_mereni
+--    from jedinec
+--    join mereni on mereni.id_jedince = jedinec.id
+--    join osetrovatel_mereni on osetrovatel_mereni.mereni_id = mereni.id
+--    join osoba on osoba.id = osetrovatel_mereni.osetrovatel_id
+--    where (jedinec.jmeno = 'Felix' or jedinec.jmeno = 'Noam' or jedinec.jmeno = 'Petroslav' or jedinec.jmeno = 'Petr') and
+--          (osoba.jmeno = 'Jaroslava Mladá' or osoba.jmeno = 'Vlasta Lajdová')
+--    group by jedinec.id, jedinec.jmeno;
+
+-- zobrazeni jednotlivych planu
+--select *
+--from PLAN_TABLE
+--where PLAN_TABLE.PLAN_ID = 889;
+--
+--select *
+--from PLAN_TABLE
+--where PLAN_TABLE.PLAN_ID = 890;
+--
+--select *
+--from PLAN_TABLE
+--where PLAN_TABLE.PLAN_ID = 891;
+
+/
