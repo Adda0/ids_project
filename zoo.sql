@@ -21,6 +21,8 @@ drop trigger jedinec_umrti_pozice;
 drop trigger jedinec_zrusena_pozice;
 drop procedure presunout_jedince_pozice;
 drop materialized view jedinec_osetrovan_osetrovatelem;
+drop materialized view jedinec_info;
+
 
 create table pavilon (
     id varchar(10) primary key,
@@ -125,7 +127,7 @@ create table osetrovatel_jedinec (
     jedinec_id varchar(20),
     foreign key (osetrovatel_id) references zamestnanec (id),
     foreign key (jedinec_id) references jedinec (id),
-    constraint pk_osetrovatel_jednice primary key (osetrovatel_id, jedinec_id)
+    constraint pk_osetrovatel_jedinec primary key (osetrovatel_id, jedinec_id)
 );
 
 create table osetrovatel_mereni (
@@ -610,7 +612,8 @@ begin
     end if;
 end;
 /
-insert into osetrovatel_jedinec values (8611067135, 'VLAR0001');
+insert into jedinec values ('VLAR0003', 'Penn', DATE '2017-03-14', null, 'vlk arktický', 'VME743A');
+insert into osetrovatel_jedinec values (8611067135, 'VLAR0003');
 
 create sequence osoba_id start with 1;
 
@@ -791,7 +794,7 @@ create or replace procedure zadat_mereni(
   pragma exception_init(check_constraint_exception, -1);
 begin
     declare
-    new_id mereni.id%TYPE;
+        new_id mereni.id%TYPE;
     begin
         insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
             values (jid, dme, zs, hm, vy)
@@ -900,16 +903,55 @@ select *
     where jedinec.pozice = 'KPT001M';
 
 
--- Pridani pristupovych prav osetrovateli
-create materialized view jedinec_osetrovan_osetrovatelem
-refresh on commit as
-    select j.*, m.id as mereni_id, m.vyska, m.hmotnost, m.zdravotni_stav, m.datum_mereni
-        from jedinec j, osetrovatel_jedinec oj, mereni m
-        where  j.id = oj.jedinec_id and m.id_jedince = j.id;
+-- jedinec muze mit jen jednoho hlavniho osetrovatele
+create or replace trigger jedinec_1_hlavni_osetrovatel
+before insert on osetrovatel_jedinec
+for each row
+declare
+    cnt int;
+begin
+    select count(*)
+        into cnt
+        from osetrovatel_jedinec j
+        where j.jedinec_id = :NEW.jedinec_id;
 
-grant select on XCHOCH08.jedinec to XMIHOL00 identified by 'long-compl-passwd';
-grant update on XCHOCH08.jedinec to XMIHOL00 identified by 'long-compl-passwd';
-grant select on XCHOCH08.jedinec_osetrovan_osetrovatelem to XMIHOL00 identified by 'long-compl-passwd';
+    if cnt <> 0 then
+        raise_application_error(-20666, 'Jedinec uz ma jednoho hlavniho osetrovatele.');
+    end if;
+end;
+/
+
+insert into jedinec values ('VLAR0004', 'Tux', DATE '2017-03-14', null, 'vlk arktický', 'VME743A');
+insert into osetrovatel_jedinec values (9106077256, 'VLAR0004');
+
+update osetrovatel_jedinec -- Update will work.
+    set osetrovatel_id = 7663214164
+    where jedinec_id = 'VLAR0004';
+
+-- Insert will not work.
+insert into osetrovatel_jedinec values (9106077256, 'VLAR0004');
+
+
+
+
+
+
+-- Pridani pristupovych prav osetrovateli pro zobrazeni jedince, ale bez moznosti upravovat data.
+create materialized view jedinec_info
+refresh on commit as
+    select j.*
+        from jedinec j, osetrovatel_mereni om
+        where  j.id = om.jedinec_id;
+
+grant select on XMIHOL00.jedinec_info to XCHOCH08 identified by 'long-compl-passwd';
+
+-- osetrovatel provadejici mereni muze k danemu jedinci pridavat mereni
+-- TODO
+grant select on XMIHOL00.mereni to XCHOCH08 identified by 'long-compl-passwd';
+grant update on XMIHOL00.mereni to XCHOCH08 identified by 'long-compl-passwd';
+
+-- XCHOCH08: insert into mereni values ...
+
 
 
 
