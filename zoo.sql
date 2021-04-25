@@ -834,3 +834,61 @@ select *
     from jedinec
     where jedinec.id in ('HOSK14890', 'HOSK14891');
 
+-- odstanit jedince ze zrusene pozice
+create or replace trigger jedinec_zrusena_pozice
+before delete on pozice
+for each row
+begin
+    update jedinec
+        set pozice = null
+        where pozice = :old.id;
+end;
+/
+
+insert into pozice (id, prostredi, datum_udrzby, typ, objem, pavilon)
+    values ('KTR124C', 'Brazílie', DATE '2002-05-30', 'klec', 25, 'TR058R');
+insert into jedinec values ('HOSK1446', 'Pepe', DATE '2020-09-04', null, 'holub skalní', 'KTR124C');
+select *
+    from jedinec
+    where jedinec.pozice in 'KTR124C';
+
+delete from pozice
+    where id = 'KTR123B';
+
+select *
+    from jedinec
+    where jedinec.id in 'HOSK14892';
+
+-- presunout vsechny jedince na novou pozici
+create or replace procedure presunout_jedince_pozice(
+    old_pos in jedinec.pozice%type,
+    new_pos in jedinec.pozice%type
+) is
+  check_constraint_exception exception;
+  pragma exception_init(check_constraint_exception, -1);
+begin
+    update jedinec
+        set pozice = replace(pozice, old_pos, new_pos);
+exception
+    when others then
+        dbms_output.put_line('nespecifikovana chyba' || SQLCODE || ' : ' || SQLERRM);
+end;
+/
+
+insert into pozice (id, prostredi, datum_udrzby, typ, objem, pavilon)
+    values ('KTR125D', 'Brazílie', DATE '2002-05-30', 'klec', 25, 'TR058R');
+insert into jedinec values ('HOSK144316', 'Norvi', DATE '2020-09-04', null, 'holub skalní', 'KTR125D');
+insert into jedinec values ('HOSK1447', 'Norvil', DATE '2020-09-04', null, 'holub skalní', 'KTR125D');
+insert into jedinec values ('HOSK1448', 'Norvilla', DATE '2020-09-04', null, 'holub skalní', 'KTR125D');
+insert into jedinec values ('HOSK1449', 'Norvilila', DATE '2020-09-04', null, 'holub skalní', 'KTR125D');
+insert into jedinec values ('HOSK1410', 'Norvla', DATE '2020-09-04', null, 'holub skalní', 'KTR125D');
+
+select *
+    from jedinec
+    where jedinec.pozice in 'KTR125D';
+
+call presunout_jedince_pozice('KTR125D', 'KPT001M');
+
+select *
+    from jedinec
+    where jedinec.pozice = 'KPT001M';
