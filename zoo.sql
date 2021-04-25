@@ -16,6 +16,11 @@ drop trigger osoba_id_inkrement;
 drop sequence osoba_id;
 drop index osoba_jmeno_index;
 drop index jedinec_jmeno_index;
+drop procedure zadat_mereni;
+drop trigger jedinec_umrti_pozice;
+drop trigger jedinec_zrusena_pozice;
+drop procedure presunout_jedince_pozice;
+drop materialized view jedinec_osetrovan_osetrovatelem;
 
 create table pavilon (
     id varchar(10) primary key,
@@ -136,8 +141,9 @@ create table udrzbar_pozice (
     udrzbar_id int,
     pozice_id varchar(20),
     foreign key (udrzbar_id) references zamestnanec (id),
-    foreign key (pozice_id) references pozice (id),
+    foreign key (pozice_id) references pozice (id) on delete cascade,
     constraint pk_udrzbar_pozice primary key (udrzbar_id, pozice_id)
+
 );
 
 -- insert 'pavilon' records
@@ -892,3 +898,18 @@ call presunout_jedince_pozice('KTR125D', 'KPT001M');
 select *
     from jedinec
     where jedinec.pozice = 'KPT001M';
+
+
+-- Pridani pristupovych prav osetrovateli
+create materialized view jedinec_osetrovan_osetrovatelem
+refresh on commit as
+    select j.*, m.id as mereni_id, m.vyska, m.hmotnost, m.zdravotni_stav, m.datum_mereni
+        from jedinec j, osetrovatel_jedinec oj, mereni m
+        where  j.id = oj.jedinec_id and m.id_jedince = j.id;
+
+grant select on XCHOCH08.jedinec to XMIHOL00 identified by 'long-compl-passwd';
+grant update on XCHOCH08.jedinec to XMIHOL00 identified by 'long-compl-passwd';
+grant select on XCHOCH08.jedinec_osetrovan_osetrovatelem to XMIHOL00 identified by 'long-compl-passwd';
+
+
+
