@@ -813,3 +813,24 @@ select m.*, om.osetrovatel_id, o.jmeno
           om.mereni_id = m.id and om.osetrovatel_id = o.id
     order by m.datum_mereni;
 
+
+-- odstanit uhynuleho jedince z pozice
+create or replace trigger jedinec_umrti_pozice
+before update of datum_umrti on jedinec
+for each row
+begin
+    if :new.datum_umrti is not null then
+        :new.pozice := null;
+    end if;
+end;
+/
+
+insert into jedinec values ('HOSK14890', 'Petromila', DATE '2020-09-04', null, 'holub skalní', 'KTR123B');
+update jedinec
+    set datum_umrti = DATE '2021-03-14'
+    where id = 'HOSK14890';
+
+select *
+    from jedinec
+    where jedinec.id in ('HOSK14890', 'HOSK14891');
+
