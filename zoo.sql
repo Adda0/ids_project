@@ -584,6 +584,10 @@ where exists (select *
               from navstevnik
               where zamestnanec.id = navstevnik.id);
 
+------------------------ 4th phase ------------------------
+-- Triggers and procedures
+
+
 create or replace trigger zamestnanec_je_osetrovatel
 before insert or update on osetrovatel_jedinec
 for each row
@@ -662,7 +666,7 @@ begin
         set plat = plat + navyseni
         where zamestnanec.id = zid;
     end loop;
-    dbms_output.put_line('celkove navyseni paltu cini: ' || celkove_navyseni);
+    dbms_output.put_line('celkove navyseni platu cini: ' || celkove_navyseni);
 end;
 /
 
@@ -766,3 +770,46 @@ order by PLAN_TABLE.PLAN_ID;
 --where PLAN_TABLE.PLAN_ID = 891;
 
 /
+
+-- osetrovatel muze zadat nove mereni
+create or replace procedure zadat_mereni(
+    oid in osetrovatel_mereni.osetrovatel_id%type,
+
+    jid in jedinec.id%type,
+    dme in mereni.datum_mereni%type,
+    zs in mereni.zdravotni_stav%type,
+    hm in mereni.hmotnost%type,
+    vy in mereni.vyska%type
+) is
+  check_constraint_exception exception;
+  pragma exception_init(check_constraint_exception, -1);
+begin
+    declare
+    new_id mereni.id%TYPE;
+    begin
+        insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
+            values (jid, dme, zs, hm, vy)
+            returning id into new_id;
+        insert into osetrovatel_mereni values (oid, jid, new_id);
+    end;
+exception
+    when others then
+        dbms_output.put_line('nespecifikovana chyba' || SQLCODE || ' : ' || SQLERRM);
+end;
+/
+
+select m.*, om.osetrovatel_id, o.jmeno
+    from jedinec j, mereni m, osetrovatel_mereni om, osoba o
+    where j.id = 'VLAR0001' and m.id_jedince = j.id and om.jedinec_id = j.id and
+          om.mereni_id = m.id and om.osetrovatel_id = o.id
+    order by m.datum_mereni;
+
+call zadat_mereni(9106077256, 'VLAR0001', DATE '2021-01-27', 'pohmožděná noha', 50.02, 1.32);
+call zadat_mereni(9106077256, 'VLAR0001', DATE '2021-03-20', 'vše v pořádku', 50.12, 1.34);
+
+select m.*, om.osetrovatel_id, o.jmeno
+    from jedinec j, mereni m, osetrovatel_mereni om, osoba o
+    where j.id = 'VLAR0001' and m.id_jedince = j.id and om.jedinec_id = j.id and
+          om.mereni_id = m.id and om.osetrovatel_id = o.id
+    order by m.datum_mereni;
+
