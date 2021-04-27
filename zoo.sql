@@ -1,3 +1,13 @@
+-- Díky 'drop table xxx' nejsou nasleudjici 'drop' prikazy nutne, ale pokud chceme
+-- odstranit jen konkretni trigger/index/view, mohou se hodit.
+drop trigger zamestnanec_je_osetrovatel;
+drop trigger osoba_id_inkrement;
+drop index osoba_jmeno_index;
+drop index jedinec_jmeno_index;
+drop trigger jedinec_umrti_pozice;
+drop trigger jedinec_zrusena_pozice;
+drop materialized view jedinec_info;
+
 drop table pavilon cascade constraints;
 drop table pozice cascade constraints;
 drop table zivocisny_druh cascade constraints;
@@ -12,16 +22,11 @@ drop table osetrovatel_jedinec cascade constraints;
 drop table osetrovatel_mereni cascade constraints;
 drop table udrzbar_pozice cascade constraints;
 drop table poznamky_XCHOCH08;
-drop trigger zamestnanec_je_osetrovatel;
-drop trigger osoba_id_inkrement;
+
 drop sequence osoba_id;
-drop index osoba_jmeno_index;
-drop index jedinec_jmeno_index;
 drop procedure zadat_mereni;
-drop trigger jedinec_umrti_pozice;
-drop trigger jedinec_zrusena_pozice;
 drop procedure presunout_jedince_pozice;
-drop materialized view jedinec_info;
+
 
 create table pavilon (
     id varchar(10) primary key,
@@ -701,7 +706,7 @@ select osoba.id as "ID", jmeno, plat
 from zamestnanec
 join osoba on osoba.id = zamestnanec.id;
 
-execute navyseni_platu(10);
+call navyseni_platu(10);
 
 select osoba.id as "ID", jmeno, plat
 from zamestnanec
@@ -725,12 +730,12 @@ end;
 /
 
 -- overeni
-execute zmena_uctu(9910244245, 'test');
+call zmena_uctu(9910244245, 'test');
 
 select *
 from zamestnanec;
 
-execute zmena_uctu(9910244245, '1234567890/0000');
+call zmena_uctu(9910244245, '1234567890/0000');
 
 select *
 from zamestnanec;
@@ -888,8 +893,6 @@ create or replace procedure presunout_jedince_pozice(
     old_pos in jedinec.pozice%type,
     new_pos in jedinec.pozice%type
 ) is
-  check_constraint_exception exception;
-  pragma exception_init(check_constraint_exception, -1); --TODO
 begin
     update jedinec
         set pozice = replace(pozice, old_pos, new_pos);
@@ -997,7 +1000,7 @@ end;
 /
 
 -- prideleni prav pro vykonani teto procedury
-grant execute on XMIHOL00.pridat_mereni_XCHOCH08 to XCHOCH08;
+grant call on XMIHOL00.pridat_mereni_XCHOCH08 to XCHOCH08;
 
 -- a aby mohl osetrovatel take menit sva zadana mereni, kdyz udela chybu, je mu vytvorena dalsi procedura
 create or replace procedure upravit_mereni_XCHOCH08(id_mereni in mereni.id%type, id_jedinec in mereni.id_jedince%type, 
@@ -1024,7 +1027,7 @@ end;
 /
 
 -- prideleni prav pro vykonani teto procedury 
-grant execute on XMIHOL00.pridat_mereni_XCHOCH08 to XCHOCH08;
+grant call on XMIHOL00.pridat_mereni_XCHOCH08 to XCHOCH08;
 
 -- a jeste aby si osetrovatel XCHOCH08 mohl delat poznamky, je pro nej na to vytvorena specialni tabulka
 create table poznamky_XCHOCH08 (
@@ -1038,7 +1041,7 @@ grant insert on XMIHOL00.poznamky_XCHOCH08 to XCHOCH08;
 grant update on XMIHOL00.poznamky_XCHOCH08 to XCHOCH08;
 grant delete on XMIHOL00.poznamky_XCHOCH08 to XCHOCH08;
 grant references on XMIHOL00.poznamky_XCHOCH08 to XCHOCH08;
--- nebo take jednim prikazem vykaname vsechn 5 predeslych
+-- nebo take jednim prikazem vykaname vsech 5 predeslych
 grant all on XMIHOL00.poznamky_XCHOCH08 to XCHOCH08;
 
 -- pouziti databaze osetrovatelem XCHOCH08
@@ -1056,24 +1059,24 @@ select * -- aktualni stav
 from mereni
 where id_jedince = 'TYUS0050' or id_jedince = 'REOS045';
 
-execute pridat_mereni_XCHOCH08('TYUS0050', to_date('2021-04-26', 'yyyy-mm-dd'), 'včše v pořádku až na zalomený drPek', 165, 1.42);
-execute pridat_mereni_XCHOCH08('TYUS0050', to_date('2021-04-27', 'yyyy-mm-dd'), 'drápek se zlepšuje', 165, 1.42);
-execute pridat_mereni_XCHOCH08('REOS045', to_date('2021-4-26', 'yyyy-mm-dd'), 'odřená ploutev', 23, 0.2);
+call pridat_mereni_XCHOCH08('TYUS0050', to_date('2021-04-26', 'yyyy-mm-dd'), 'včše v pořádku až na zalomený drPek', 165, 1.42);
+call pridat_mereni_XCHOCH08('TYUS0050', to_date('2021-04-27', 'yyyy-mm-dd'), 'drápek se zlepšuje', 165, 1.42);
+call pridat_mereni_XCHOCH08('REOS045', to_date('2021-4-26', 'yyyy-mm-dd'), 'odřená ploutev', 23, 0.2);
 
 select * -- stav po pridani mereni
 from mereni
 where id_jedince = 'TYUS0050' or id_jedince = 'REOS045';
 
 -- pote chce pridat mereni k jedinci, ke kteremu nema prava -> chyba
-execute pridat_mereni_XCHOCH08('HOSK1489', to_date('2021-05-01', 'yyyy-mm-dd'), 'vše v pořádku', 0.32, 0.16);
+call pridat_mereni_XCHOCH08('HOSK1489', to_date('2021-05-01', 'yyyy-mm-dd'), 'vše v pořádku', 0.32, 0.16);
 
 -- vsimne si ze u jedince s id TYUS0050 udelal chybu v popisu mereni a opravi ji
-execute upravit_mereni_XCHOCH08(14, 'TYUS0050', to_date('2021-04-26', 'yyyy-mm-dd'), 'vše v pořádku až na zalomený drápek', 165, 1.42);
+call upravit_mereni_XCHOCH08(14, 'TYUS0050', to_date('2021-04-26', 'yyyy-mm-dd'), 'vše v pořádku až na zalomený drápek', 165, 1.42);
 
 select * -- stav po oprave
 from mereni
 where id_jedince = 'TYUS0050';
 
 -- a pokusi se upravit i mereni u jedince, ke kteremu nema pristup -> chyba
-execute upravit_mereni_XCHOCH08(9, 'PLRU0003', to_date('2021-04-26', 'yyyy-mm-dd'), 'upraveny stav', 165, 1.42);
+call upravit_mereni_XCHOCH08(9, 'PLRU0003', to_date('2021-04-26', 'yyyy-mm-dd'), 'upraveny stav', 165, 1.42);
 
