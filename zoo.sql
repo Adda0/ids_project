@@ -1,3 +1,13 @@
+-- Diky 'drop table xxx' nejsou nasledujici 'drop' prikazy nutne, ale pokud chceme
+-- odstranit jen konkretni trigger/index/view, mohou se hodit.
+drop trigger zamestnanec_je_osetrovatel;
+drop trigger osoba_id_inkrement;
+drop index osoba_jmeno_index;
+drop index jedinec_jmeno_index;
+drop trigger jedinec_umrti_pozice;
+drop trigger jedinec_zrusena_pozice;
+drop materialized view jedinec_info;
+
 drop table pavilon cascade constraints;
 drop table pozice cascade constraints;
 drop table zivocisny_druh cascade constraints;
@@ -11,6 +21,12 @@ drop table zamestnanec_kvalifikace cascade constraints;
 drop table osetrovatel_jedinec cascade constraints;
 drop table osetrovatel_mereni cascade constraints;
 drop table udrzbar_pozice cascade constraints;
+drop table poznamky_XCHOCH08;
+
+drop sequence osoba_id;
+drop procedure zadat_mereni;
+drop procedure presunout_jedince_pozice;
+
 
 create table pavilon (
     id varchar(10) primary key,
@@ -115,7 +131,7 @@ create table osetrovatel_jedinec (
     jedinec_id varchar(20),
     foreign key (osetrovatel_id) references zamestnanec (id),
     foreign key (jedinec_id) references jedinec (id),
-    constraint pk_osetrovatel_jednice primary key (osetrovatel_id, jedinec_id)
+    constraint pk_osetrovatel_jedinec primary key (osetrovatel_id, jedinec_id)
 );
 
 create table osetrovatel_mereni (
@@ -131,8 +147,9 @@ create table udrzbar_pozice (
     udrzbar_id int,
     pozice_id varchar(20),
     foreign key (udrzbar_id) references zamestnanec (id),
-    foreign key (pozice_id) references pozice (id),
+    foreign key (pozice_id) references pozice (id) on delete cascade,
     constraint pk_udrzbar_pozice primary key (udrzbar_id, pozice_id)
+
 );
 
 -- insert 'pavilon' records
@@ -208,8 +225,8 @@ insert into jedinec values ('ALST422', 'Anna', DATE '2019-08-25', null, 'albatro
 insert into jedinec values ('ANVE015', 'Anaka', DATE '2018-11-10', null, 'anakonda velká', 'TPL666E');
 
 -- insert 'zamestnanec' records
-insert into osoba values (9910244245, 'David Mihola', 'Brno, 635 00', 'xmihol00@stud.fit.vutbr.cz');
-insert into zamestnanec values (9910244245, '8521473667/0800', '+420774826266', DATE '2018-07-21', 42000, null, 'spravce');
+insert into osoba values (9910244245, 'ZOO Spravnce', 'Brno, 156 23', 'SpravceZOO@zoo.cz');
+insert into zamestnanec values (9910244245, '9988663254/0520', '+420856321478', DATE '2016-06-23', 42000, null, 'spravce');
 insert into osoba values (9502233628, 'Jakub Beran', 'Znojmo 965 33', 'beran.jakub@gmail.com');
 insert into zamestnanec values (9502233628, '9962473356/0600', '+420965243312', DATE '2019-09-26', 32850, 9910244245, 'udrzbar');
 insert into osoba values (9106077256, 'Vlasta Lajdová', 'Zlín, 168 36', 'vlajdova@volny.cz');
@@ -224,16 +241,20 @@ insert into osoba values (9611251334, 'Milan Lander', 'Jihlava 512 34', 'milande
 insert into zamestnanec values (9611251334, '1126648792/0700', '+420135879624', DATE '2018-02-03', 28762, 9502233628, 'udrzbar');
 insert into osoba values (9862038563, 'Ludmila Pakostová', 'Zlín, 168 36', 'pakostovaludmila@seznam.cz');
 insert into zamestnanec values (9862038563, '5569218423/0620', '+420742698531', DATE '2021-03-20', 22671, 7663214164, 'osetrovatel');
+insert into osoba values (8596141126, 'David Mihola', 'Brno, 635 00', 'xmihol00@stud.fit.vutbr.cz');
+insert into zamestnanec values (8596141126, '8521473667/0800', '+420774826266', DATE '2018-07-21', 36325, 9910244245, 'osetrovatel');
+insert into osoba values (9762341821, 'David Chocholatý', 'Brno, 623 00', 'xchoch08@stud.fit.vutbr.cz');
+insert into zamestnanec values (9762341821, '6698223471/0440', '+420223885664', DATE '2020-01-08', 27825, 8596141126, 'osetrovatel');
 
 -- insert 'navstevnik' records
 insert into osoba values (1, 'Petr Ponožka', 'Liberec, 264 02', 'p.p@centrum.cz');
 insert into navstevnik values (1, 863, DATE '2021-09-13', 13);
 insert into osoba values (2, 'Libuše Baledová', 'Ostrava, 523 41', 'ba.li@gmail.com');
 insert into navstevnik values (2, 65, DATE '2021-04-26', 8);
-insert into osoba values (3, 'Barbora Hranolová', 'Kladno, 746 82', 'hranolka@gmail.com');
-insert into navstevnik values (3, 1366, DATE '2021-10-02', 16);
-insert into osoba values (4, 'Marek Brambora', 'Plzeň, 234 11', 'bramboram@volny.cz');
-insert into navstevnik values (4, 733, DATE '2021-08-26', 12);
+insert into osoba values (4, 'Barbora Hranolová', 'Kladno, 746 82', 'hranolka@gmail.com');
+insert into navstevnik values (4, 1366, DATE '2021-10-02', 16);
+insert into osoba values (5, 'Marek Brambora', 'Plzeň, 234 11', 'bramboram@volny.cz');
+insert into navstevnik values (5, 733, DATE '2021-08-26', 12);
 -- osoba Pavel Okurka
 insert into navstevnik values (7603242237, 159, DATE '2021-06-19', 4);
 
@@ -276,6 +297,8 @@ insert into osetrovatel_jedinec values (7663214164, 'REOS044');
 insert into osetrovatel_jedinec values (7663214164, 'ARAR001');
 insert into osetrovatel_jedinec values (7663214164, 'ALST421');
 insert into osetrovatel_jedinec values (7663214164, 'ALST422');
+insert into osetrovatel_jedinec values (8596141126, 'TYUS0050');
+insert into osetrovatel_jedinec values (8596141126, 'REOS045');
 
 -- insert 'udrzbar_pozice' records
 insert into udrzbar_pozice values (9502233628, 'KKO402D');
@@ -287,6 +310,7 @@ insert into udrzbar_pozice values (9611251334, 'VME743A');
 insert into udrzbar_pozice values (9611251334, 'VLV075S');
 insert into udrzbar_pozice values (9611251334, 'KTR123B');
 insert into udrzbar_pozice values (9611251334, 'KPT001M');
+
 
 -- insert 'mereni' and 'osetrovatel_mereni' records
 DECLARE
@@ -578,3 +602,481 @@ join osoba on osoba.id = zamestnanec.id
 where exists (select *
               from navstevnik
               where zamestnanec.id = navstevnik.id);
+
+------------------------ 4. faze ------------------------
+-- Triggery a procedury
+
+-- trigger osetrujici, ze osetrovatelem jedince se muze stat pouze zamestnanec typu osetrovatel
+create or replace trigger zamestnanec_je_osetrovatel
+before insert or update on osetrovatel_jedinec
+for each row
+declare
+    zamestnanec_typ varchar(15);
+begin
+    select zamestnanec.typ
+    into zamestnanec_typ
+    from zamestnanec
+    where zamestnanec.id = :NEW.osetrovatel_id;
+    
+    if zamestnanec_typ <> 'osetrovatel' then
+        raise_application_error(-1, 'Jiny zamestnanec nez osetrovatel nemuze osetrovat zivosichy.');
+    end if;
+end;
+/
+
+-- overeni
+insert into jedinec values ('VLAR0003', 'Penn', DATE '2017-03-14', null, 'vlk arktický', 'VME743A');
+insert into osetrovatel_jedinec values (8611067135, 'VLAR0003');
+-- konec trigger zamestnanec_je_osetrovatel
+
+-- sekvence pro generovani id
+create sequence osoba_id start with 1;
+
+-- trigger pro vygenerovani id pri vlozeni zanznamu do tabulky osoba s hodnotou id null
+create or replace trigger osoba_id_inkrement
+before insert or update on osoba
+for each row
+declare
+    pocet int;
+begin
+    if :NEW.id is null then
+        select osoba_id.nextval
+        into :NEW.id
+        from dual;
+
+        select count(*)
+        into pocet
+        from osoba
+        where osoba.id = :NEW.id;
+
+        while pocet > 0 loop -- dokud je pocet zamestnancu s danym id vetsi nez 0, id je inkrementovano
+            select osoba_id.nextval
+            into :NEW.id
+            from dual;
+            
+            select count(*)
+            into pocet
+            from osoba
+            where osoba.id = :NEW.id;
+        end loop;
+    end if;
+end;
+/
+
+-- overeni
+insert into osoba(jmeno, adresa, email) values ('Marie Velká', 'Poděbrady, 269 16', 'velkamarie@centrum.cz');
+insert into osoba(jmeno, adresa, email) values ('Luboš Malina', 'Praha, 555 66', 'malinalub@gmail.com');
+
+
+select *
+from osoba;
+-- konec trigger osoba_id_inkrement
+
+-- ulozena procedura pro navyseni platu vsech zamestnancu v procentech
+create or replace procedure navyseni_platu(procento in zamestnanec.plat%type) is
+    zid zamestnanec.id%type;
+    plat zamestnanec.plat%type;
+    navyseni zamestnanec.plat%type;
+    celkove_navyseni zamestnanec.plat%type;
+    jmeno osoba.jmeno%type;
+    cursor zamestnanec_cursor is 
+        select zamestnanec.id, jmeno, plat 
+        from zamestnanec
+        join osoba on osoba.id = zamestnanec.id;
+begin
+    celkove_navyseni := 0;
+    open zamestnanec_cursor;
+    loop
+        fetch zamestnanec_cursor into zid, jmeno, plat;
+        exit when zamestnanec_cursor%notfound;
+
+        navyseni := plat * (procento / 100);
+        celkove_navyseni := celkove_navyseni + navyseni;
+        dbms_output.put_line('plat zamestnance ' || jmeno || ' navysen o ' || navyseni);
+        update zamestnanec
+        set plat = plat + navyseni
+        where zamestnanec.id = zid;
+    end loop;
+    dbms_output.put_line('celkove navyseni platu cini: ' || celkove_navyseni);
+end;
+/
+
+-- overeni
+select osoba.id as "ID", jmeno, plat
+from zamestnanec
+join osoba on osoba.id = zamestnanec.id;
+
+call navyseni_platu(10);
+
+select osoba.id as "ID", jmeno, plat
+from zamestnanec
+join osoba on osoba.id = zamestnanec.id;
+-- konec procedury navyseni_platu
+
+-- procedura pro zmenu bankovniho uctu zamestnance, kontroluje platnost uctu
+create or replace procedure zmena_uctu(zid in zamestnanec.id%type, nove_cislo_uctu in zamestnanec.cislo_uctu%type) is
+  check_constraint_exception exception;
+  pragma exception_init(check_constraint_exception, -2290);
+begin
+    update zamestnanec
+    set zamestnanec.cislo_uctu = nove_cislo_uctu
+    where zamestnanec.id = zid;
+exception
+    when check_constraint_exception then
+        dbms_output.put_line('neplatne cislo uctu: ' || nove_cislo_uctu);
+    when others then
+        dbms_output.put_line('nespecifikovana chyba' || SQLCODE || ' : ' || SQLERRM);
+end;
+/
+
+-- overeni
+call zmena_uctu(9910244245, 'test');
+
+select *
+from zamestnanec;
+
+call zmena_uctu(9910244245, '1234567890/0000');
+
+select *
+from zamestnanec;
+-- konec procedury zmena_uctu
+
+-- explain plan a index pro vyhledavani v tabulce osoba a jedinec
+delete from PLAN_TABLE;
+
+explain plan for
+    select jedinec.id, jedinec.jmeno, count(*) as pocet_mereni
+        from jedinec, mereni, osetrovatel_mereni, osoba
+        where (jedinec.jmeno = 'Felix' or jedinec.jmeno = 'Noam' or jedinec.jmeno = 'Petroslav' or jedinec.jmeno = 'Macko') and 
+              (osoba.jmeno = 'Jaroslava Mladá' or osoba.jmeno = 'Vlasta Lajdová') and osoba.id = osetrovatel_mereni.osetrovatel_id and 
+              mereni.id_jedince = jedinec.id and osetrovatel_mereni.mereni_id = mereni.id
+        group by jedinec.id, jedinec.jmeno;
+
+select *
+from PLAN_TABLE
+order by PLAN_TABLE.PLAN_ID;
+
+-- prvni urychleni - pouzitim indexu pro jmeno osoby
+create index osoba_jmeno_index
+on osoba (jmeno);
+
+explain plan for
+    select jedinec.id, jedinec.jmeno, count(*) as pocet_mereni
+        from jedinec, mereni, osetrovatel_mereni, osoba
+        where (jedinec.jmeno = 'Felix' or jedinec.jmeno = 'Noam' or jedinec.jmeno = 'Petroslav' or jedinec.jmeno = 'Macko') and 
+              (osoba.jmeno = 'Jaroslava Mladá' or osoba.jmeno = 'Vlasta Lajdová') and osoba.id = osetrovatel_mereni.osetrovatel_id and 
+              mereni.id_jedince = jedinec.id and osetrovatel_mereni.mereni_id = mereni.id
+        group by jedinec.id, jedinec.jmeno;
+
+select *
+from PLAN_TABLE
+order by PLAN_TABLE.PLAN_ID;
+
+-- druhe urychleni - pouziti ID u jedincu misto jmen, coz vede na pouziti indexu primarniho klice
+explain plan for
+    select jedinec.id, jedinec.jmeno, count(*) as pocet_mereni
+        from jedinec, mereni, osetrovatel_mereni, osoba
+        where (jedinec.id = 'VLAR0001' or jedinec.id = 'PLRU0003' or jedinec.id = 'HOSK1043' or jedinec.id = 'MASK002') and 
+              (osoba.jmeno = 'Jaroslava Mladá' or osoba.jmeno = 'Vlasta Lajdová') and osoba.id = osetrovatel_mereni.osetrovatel_id and 
+              mereni.id_jedince = jedinec.id and osetrovatel_mereni.mereni_id = mereni.id
+        group by jedinec.id, jedinec.jmeno;
+
+-- druhe urychleni - pouziti indexu i pro jmeno jedince
+create index jedinec_jmeno_index
+on jedinec (jmeno);
+
+explain plan for
+    select jedinec.id, jedinec.jmeno, count(*) as pocet_mereni
+        from jedinec, mereni, osetrovatel_mereni, osoba
+        where (jedinec.jmeno = 'Felix' or jedinec.jmeno = 'Noam' or jedinec.jmeno = 'Petroslav' or jedinec.jmeno = 'Macko') and 
+              (osoba.jmeno = 'Jaroslava Mladá' or osoba.jmeno = 'Vlasta Lajdová') and osoba.id = osetrovatel_mereni.osetrovatel_id and 
+              mereni.id_jedince = jedinec.id and osetrovatel_mereni.mereni_id = mereni.id
+        group by jedinec.id, jedinec.jmeno;
+
+select *
+from PLAN_TABLE
+order by PLAN_TABLE.PLAN_ID;
+-- konec explain plan a indexu
+/
+
+-- osetrovatel muze zadat nove mereni
+create or replace procedure zadat_mereni(
+    oid in osetrovatel_mereni.osetrovatel_id%type,
+
+    jid in jedinec.id%type,
+    dme in mereni.datum_mereni%type,
+    zs in mereni.zdravotni_stav%type,
+    hm in mereni.hmotnost%type,
+    vy in mereni.vyska%type
+) is
+  check_constraint_exception exception;
+  pragma exception_init(check_constraint_exception, -1);
+begin
+    declare
+        new_id mereni.id%TYPE;
+    begin
+        insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
+            values (jid, dme, zs, hm, vy)
+            returning id into new_id;
+        insert into osetrovatel_mereni values (oid, jid, new_id);
+    end;
+exception
+    when others then
+        dbms_output.put_line('nespecifikovana chyba' || SQLCODE || ' : ' || SQLERRM);
+end;
+/
+
+select m.*, om.osetrovatel_id, o.jmeno
+    from jedinec j, mereni m, osetrovatel_mereni om, osoba o
+    where j.id = 'VLAR0001' and m.id_jedince = j.id and om.jedinec_id = j.id and
+          om.mereni_id = m.id and om.osetrovatel_id = o.id
+    order by m.datum_mereni;
+
+call zadat_mereni(9106077256, 'VLAR0001', DATE '2021-01-27', 'pohmožděná noha', 50.02, 1.32);
+call zadat_mereni(9106077256, 'VLAR0001', DATE '2021-03-20', 'vše v pořádku', 50.12, 1.34);
+
+
+select m.*, om.osetrovatel_id, o.jmeno
+    from jedinec j, mereni m, osetrovatel_mereni om, osoba o
+    where j.id = 'VLAR0001' and m.id_jedince = j.id and om.jedinec_id = j.id and
+          om.mereni_id = m.id and om.osetrovatel_id = o.id
+    order by m.datum_mereni;
+
+
+-- odstanit uhynuleho jedince z pozice
+create or replace trigger jedinec_umrti_pozice
+before update of datum_umrti on jedinec
+for each row
+begin
+    if :new.datum_umrti is not null then
+        :new.pozice := null;
+    end if;
+end;
+/
+
+insert into jedinec values ('HOSK14890', 'Petromila', DATE '2020-09-04', null, 'holub skalní', 'KTR123B');
+update jedinec
+    set datum_umrti = DATE '2021-03-14'
+    where id = 'HOSK14890';
+
+select *
+    from jedinec
+    where jedinec.id in ('HOSK14890', 'HOSK14891');
+
+-- odstanit jedince ze zrusene pozice
+create or replace trigger jedinec_zrusena_pozice
+before delete on pozice
+for each row
+begin
+    update jedinec
+        set pozice = null
+        where pozice = :old.id;
+end;
+/
+
+insert into pozice (id, prostredi, datum_udrzby, typ, objem, pavilon)
+    values ('KTR124C', 'Brazílie', DATE '2002-05-30', 'klec', 25, 'TR058R');
+insert into jedinec values ('HOSK1446', 'Pepe', DATE '2020-09-04', null, 'holub skalní', 'KTR124C');
+select *
+    from jedinec
+    where jedinec.pozice in 'KTR124C';
+
+delete from pozice
+    where id = 'KTR123B';
+
+select *
+    from jedinec
+    where jedinec.id in 'HOSK14892';
+
+-- presunout vsechny jedince na novou pozici
+create or replace procedure presunout_jedince_pozice(
+    old_pos in jedinec.pozice%type,
+    new_pos in jedinec.pozice%type
+) is
+begin
+    update jedinec
+        set pozice = replace(pozice, old_pos, new_pos);
+exception
+    when others then
+        dbms_output.put_line('nespecifikovana chyba' || SQLCODE || ' : ' || SQLERRM);
+end;
+/
+
+insert into pozice (id, prostredi, datum_udrzby, typ, objem, pavilon)
+    values ('KTR125D', 'Brazílie', DATE '2002-05-30', 'klec', 25, 'TR058R');
+insert into jedinec values ('HOSK144316', 'Norvi', DATE '2020-09-04', null, 'holub skalní', 'KTR125D');
+insert into jedinec values ('HOSK1447', 'Norvil', DATE '2020-09-04', null, 'holub skalní', 'KTR125D');
+insert into jedinec values ('HOSK1448', 'Norvilla', DATE '2020-09-04', null, 'holub skalní', 'KTR125D');
+insert into jedinec values ('HOSK1449', 'Norvilila', DATE '2020-09-04', null, 'holub skalní', 'KTR125D');
+insert into jedinec values ('HOSK1410', 'Norvla', DATE '2020-09-04', null, 'holub skalní', 'KTR125D');
+
+select *
+    from jedinec
+    where jedinec.pozice in 'KTR125D';
+
+call presunout_jedince_pozice('KTR125D', 'KPT001M');
+
+select *
+    from jedinec
+    where jedinec.pozice = 'KPT001M';
+
+
+-- jedinec muze mit jen jednoho hlavniho osetrovatele
+create or replace trigger jedinec_1_hlavni_osetrovatel
+before insert on osetrovatel_jedinec
+for each row
+declare
+    cnt int;
+begin
+    select count(*)
+        into cnt
+        from osetrovatel_jedinec j
+        where j.jedinec_id = :NEW.jedinec_id;
+
+    if cnt <> 0 then
+        raise_application_error(-20666, 'Jedinec uz ma jednoho hlavniho osetrovatele.');
+    end if;
+end;
+/
+
+insert into jedinec values ('VLAR0004', 'Tux', DATE '2017-03-14', null, 'vlk arktický', 'VME743A');
+insert into osetrovatel_jedinec values (9106077256, 'VLAR0004');
+
+update osetrovatel_jedinec -- Update will work.
+    set osetrovatel_id = 7663214164
+    where jedinec_id = 'VLAR0004';
+
+-- Insert will not work.
+insert into osetrovatel_jedinec values (9106077256, 'VLAR0004');
+
+-- Osetrovatel David Mihola (XMHIHOL00) poskytne svemu podrizenemu osetrovateli Davidu Chocholatému (XCOHOCH08) pristup
+-- ke vsem datum o jedincich, o ktere se stara, aby provadel mereni na techto zivocisich. XCHOCH08 muze tato data
+-- prohlizet prostrednictvim view, ale nemuze je modifikovat.
+create materialized view jedinec_info
+refresh on commit
+enable query rewrite
+as
+    select j.id as "id jedince", j.jmeno as "jmeno jedince", j.datum_narozeni as "datum narozeni jedince",  
+           j.datum_umrti as "datum umrti jedince", j.zastupce_druhu as "zivocisny druh", p.id as "id pozice", p.prostredi "prostredi", 
+           p.datum_udrzby as "datum udrzby pozice", p.typ as "typ pozice", p.plocha as "plocha pozice", p.objem as "objem pozice", 
+           p.pavilon as "pavilon"
+        from jedinec j, osetrovatel_jedinec oj, zamestnanec z, pozice p
+        where oj.osetrovatel_id = 8596141126 and j.id = oj.jedinec_id and p.id = j.pozice
+        group by j.id, j.jmeno, j.datum_narozeni,  j.datum_umrti, j.zastupce_druhu, p.id, p.prostredi,
+                 p.datum_udrzby, p.typ, p.plocha, p.objem, p.pavilon;
+
+-- prideleni prav pro vyhledavani/cteni view jedince_info osetrovateli XCHOCH08
+grant select on XMIHOL00.jedinec_info to XCHOCH08;
+
+-- prideleni prav pro vyhledavani/cteni tabulky mereni osetrovateli XCHOCH08
+grant select on XMIHOL00.mereni to XCHOCH08;
+
+-- aby mohl osetrovatel XCHOCH08 pridavat mereni, je nutne vytvorit specialni proceduru, ktera kontroluje, jestli zadava mereni
+-- spravnemu jedinci.
+create or replace procedure pridat_mereni_XCHOCH08(id_jedince in mereni.id_jedince%type, datum_mereni in mereni.datum_mereni%type,
+                                                   zdravotni_stav in mereni.zdravotni_stav%type, hmotnost in mereni.hmotnost%type, 
+                                                   vyska in mereni.vyska%type) is   
+    type XCHOCH08_mereni_t is record (
+        id_jedince mereni.id_jedince%TYPE,
+        id mereni.id%TYPE
+    );
+    XCHOCH08_mereni XCHOCH08_mereni_t;
+    kontrolni_pocet int;
+begin
+    select count(*)
+    into kontrolni_pocet
+    from osetrovatel_jedinec
+    where osetrovatel_id = 8596141126 and jedinec_id = id_jedince;
+
+    if kontrolni_pocet > 0 then
+        insert into mereni (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
+        values (id_jedince, datum_mereni, zdravotni_stav, hmotnost, vyska)
+        returning id_jedince, id into XCHOCH08_mereni;
+        insert into osetrovatel_mereni values (9762341821, XCHOCH08_mereni.id_jedince, XCHOCH08_mereni.id);
+    else
+        raise_application_error(-20005, 'Nemate pristup k danemu jedinci, zkontrolujte jeho ID.');
+    end if;
+end;
+/
+
+-- prideleni prav pro vykonani teto procedury
+grant call on XMIHOL00.pridat_mereni_XCHOCH08 to XCHOCH08;
+
+-- a aby mohl osetrovatel take menit sva zadana mereni, kdyz udela chybu, je mu vytvorena dalsi procedura
+create or replace procedure upravit_mereni_XCHOCH08(id_mereni in mereni.id%type, id_jedinec in mereni.id_jedince%type, 
+                                                    datum_mereni in mereni.datum_mereni%type, zdravotni_stav in mereni.zdravotni_stav%type, 
+                                                    hmotnost in mereni.hmotnost%type, vyska in mereni.vyska%type) is   
+    kontrolni_pocet int;
+begin
+    select count(*)
+    into kontrolni_pocet
+    from osetrovatel_jedinec, mereni, osetrovatel_mereni
+    where osetrovatel_jedinec.osetrovatel_id = 8596141126 and upravit_mereni_XCHOCH08.id_jedinec = mereni.id_jedince 
+          and mereni.id = upravit_mereni_XCHOCH08.id_mereni and osetrovatel_mereni.osetrovatel_id = 9762341821 
+          and osetrovatel_jedinec.jedinec_id = upravit_mereni_XCHOCH08.id_jedinec;
+
+    if kontrolni_pocet > 0 then
+        update mereni
+        set mereni.datum_mereni = upravit_mereni_XCHOCH08.datum_mereni, mereni.zdravotni_stav = upravit_mereni_XCHOCH08.zdravotni_stav, 
+            mereni.hmotnost = upravit_mereni_XCHOCH08.hmotnost, mereni.vyska = upravit_mereni_XCHOCH08.vyska
+        where mereni.id = upravit_mereni_XCHOCH08.id_mereni;
+    else
+        raise_application_error(-20006, 'Nemate pristup k danemu jedinci nebo mereni neexistuje.');
+    end if;
+end;
+/
+
+-- prideleni prav pro vykonani teto procedury 
+grant execute on XMIHOL00.pridat_mereni_XCHOCH08 to XCHOCH08;
+
+-- a jeste aby si osetrovatel XCHOCH08 mohl delat poznamky, je pro nej na to vytvorena specialni tabulka
+create table poznamky_XCHOCH08 (
+    nazev varchar(25) primary key,
+    text varchar(500)
+);
+
+-- a pridelena prava k teto tabulce
+grant select on XMIHOL00.poznamky_XCHOCH08 to XCHOCH08;
+grant insert on XMIHOL00.poznamky_XCHOCH08 to XCHOCH08;
+grant update on XMIHOL00.poznamky_XCHOCH08 to XCHOCH08;
+grant delete on XMIHOL00.poznamky_XCHOCH08 to XCHOCH08;
+grant references on XMIHOL00.poznamky_XCHOCH08 to XCHOCH08;
+-- nebo take jednim prikazem vykaname vsech 5 predeslych
+grant all on XMIHOL00.poznamky_XCHOCH08 to XCHOCH08;
+
+-- pouziti databaze osetrovatelem XCHOCH08
+-- osetrovatele XCHOCH08 nejdrive zajima, jake zivocisne druhy ma osetrovat, jmena zivocichu a jejich id, aby se mohl pripravit.
+select "zivocisny druh", "jmeno jedince", "id jedince" 
+from XMIHOL00.jedinec_info;
+
+-- pote se rozhodne podivat, kde jsou tito jedinci rozmisteni a naplanuje si nejefektivnejsi pruchod ZOO pro provedeni mereni.
+select "id jedince", "id pozice", "pavilon"
+from XMIHOL00.jedinec_info;
+
+-- a da se do prace
+-- nejdrive uspesne prida mereni.
+select * -- aktualni stav
+from XMIHOL00.mereni
+where id_jedince = 'TYUS0050' or id_jedince = 'REOS045';
+
+call pridat_mereni_XCHOCH08('TYUS0050', to_date('2021-04-26', 'yyyy-mm-dd'), 'včše v pořádku až na zalomený drPek', 165, 1.42);
+call pridat_mereni_XCHOCH08('TYUS0050', to_date('2021-04-27', 'yyyy-mm-dd'), 'drápek se zlepšuje', 165, 1.42);
+call pridat_mereni_XCHOCH08('REOS045', to_date('2021-4-26', 'yyyy-mm-dd'), 'odřená ploutev', 23, 0.2);
+
+select * -- stav po pridani mereni
+from XMIHOL00.mereni
+where id_jedince = 'TYUS0050' or id_jedince = 'REOS045';
+
+-- pote chce pridat mereni k jedinci, ke kteremu nema prava -> chyba
+call pridat_mereni_XCHOCH08('HOSK1489', to_date('2021-05-01', 'yyyy-mm-dd'), 'vše v pořádku', 0.32, 0.16);
+
+-- vsimne si ze u jedince s id TYUS0050 udelal chybu v popisu mereni a opravi ji
+call upravit_mereni_XCHOCH08(14, 'TYUS0050', to_date('2021-04-26', 'yyyy-mm-dd'), 'vše v pořádku až na zalomený drápek', 165, 1.42);
+
+select * -- stav po oprave
+from XMIHOL00.mereni
+where id_jedince = 'TYUS0050';
+
+-- a pokusi se upravit i mereni u jedince, ke kteremu nema pristup -> chyba
+call upravit_mereni_XCHOCH08(9, 'PLRU0003', to_date('2021-04-26', 'yyyy-mm-dd'), 'upraveny stav', 165, 1.42);
+
