@@ -949,9 +949,9 @@ update osetrovatel_jedinec -- Update will work.
 -- Insert will not work.
 insert into osetrovatel_jedinec values (9106077256, 'VLAR0004');
 
--- Osetrovatel David Mihola (XMHIHOL00) poskytne svemu podrizenemu osetrovateli Davidu Chocholatému (XCOHOCH08) pristup
+-- Osetrovatel David Mihola (XMIHOL00) poskytne svemu podrizenemu osetrovateli Davidu Chocholatemu (XCHOCH08) pristup
 -- ke vsem datum o jedincich, o ktere se stara, aby provadel mereni na techto zivocisich. XCHOCH08 muze tato data
--- prohlizet prostrednictvim view, ale nemuze je modifikovat.
+-- prohlizet prostrednictvim materialized view 'jedinec_info', ale nemuze je modifikovat.
 create materialized view jedinec_info
 refresh on commit
 enable query rewrite
@@ -1000,7 +1000,7 @@ end;
 /
 
 -- prideleni prav pro vykonani teto procedury
-grant call on XMIHOL00.pridat_mereni_XCHOCH08 to XCHOCH08;
+grant execute on XMIHOL00.pridat_mereni_XCHOCH08 to XCHOCH08;
 
 -- a aby mohl osetrovatel take menit sva zadana mereni, kdyz udela chybu, je mu vytvorena dalsi procedura
 create or replace procedure upravit_mereni_XCHOCH08(id_mereni in mereni.id%type, id_jedinec in mereni.id_jedince%type, 
@@ -1027,7 +1027,7 @@ end;
 /
 
 -- prideleni prav pro vykonani teto procedury 
-grant execute on XMIHOL00.pridat_mereni_XCHOCH08 to XCHOCH08;
+grant execute on XMIHOL00.upravit_mereni_XCHOCH08 to XCHOCH08;
 
 -- a jeste aby si osetrovatel XCHOCH08 mohl delat poznamky, je pro nej na to vytvorena specialni tabulka
 create table poznamky_XCHOCH08 (
@@ -1053,7 +1053,7 @@ from XMIHOL00.jedinec_info;
 select "id jedince", "id pozice", "pavilon"
 from XMIHOL00.jedinec_info;
 
--- a da se do prace
+-- a da se do prace:
 -- nejdrive uspesne prida mereni.
 select * -- aktualni stav
 from XMIHOL00.mereni
