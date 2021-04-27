@@ -1,4 +1,4 @@
--- Díky 'drop table xxx' nejsou nasleudjici 'drop' prikazy nutne, ale pokud chceme
+-- Diky 'drop table xxx' nejsou nasledujici 'drop' prikazy nutne, ale pokud chceme
 -- odstranit jen konkretni trigger/index/view, mohou se hodit.
 drop trigger zamestnanec_je_osetrovatel;
 drop trigger osoba_id_inkrement;
@@ -1027,7 +1027,7 @@ end;
 /
 
 -- prideleni prav pro vykonani teto procedury 
-grant call on XMIHOL00.pridat_mereni_XCHOCH08 to XCHOCH08;
+grant execute on XMIHOL00.pridat_mereni_XCHOCH08 to XCHOCH08;
 
 -- a jeste aby si osetrovatel XCHOCH08 mohl delat poznamky, je pro nej na to vytvorena specialni tabulka
 create table poznamky_XCHOCH08 (
