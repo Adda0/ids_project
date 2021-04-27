@@ -954,7 +954,7 @@ insert into osetrovatel_jedinec values (9106077256, 'VLAR0004');
 -- prohlizet prostrednictvim view, ale nemuze je modifikovat.
 create materialized view jedinec_info
 refresh on commit
-ENABLE QUERY REWRITE
+enable query rewrite
 as
     select j.id as "id jedince", j.jmeno as "jmeno jedince", j.datum_narozeni as "datum narozeni jedince",  
            j.datum_umrti as "datum umrti jedince", j.zastupce_druhu as "zivocisny druh", p.id as "id pozice", p.prostredi "prostredi", 
@@ -962,7 +962,7 @@ as
            p.pavilon as "pavilon"
         from jedinec j, osetrovatel_jedinec oj, zamestnanec z, pozice p
         where oj.osetrovatel_id = 8596141126 and j.id = oj.jedinec_id and p.id = j.pozice
-        GROUP by j.id, j.jmeno, j.datum_narozeni,  j.datum_umrti, j.zastupce_druhu, p.id, p.prostredi, 
+        group by j.id, j.jmeno, j.datum_narozeni,  j.datum_umrti, j.zastupce_druhu, p.id, p.prostredi,
                  p.datum_udrzby, p.typ, p.plocha, p.objem, p.pavilon;
 
 -- prideleni prav pro vyhledavani/cteni view jedince_info osetrovateli XCHOCH08
@@ -1047,16 +1047,16 @@ grant all on XMIHOL00.poznamky_XCHOCH08 to XCHOCH08;
 -- pouziti databaze osetrovatelem XCHOCH08
 -- osetrovatele XCHOCH08 nejdrive zajima, jake zivocisne druhy ma osetrovat, jmena zivocichu a jejich id, aby se mohl pripravit.
 select "zivocisny druh", "jmeno jedince", "id jedince" 
-from jedinec_info;
+from XMIHOL00.jedinec_info;
 
 -- pote se rozhodne podivat, kde jsou tito jedinci rozmisteni a naplanuje si nejefektivnejsi pruchod ZOO pro provedeni mereni.
 select "id jedince", "id pozice", "pavilon"
-from jedinec_info;
+from XMIHOL00.jedinec_info;
 
 -- a da se do prace
 -- nejdrive uspesne prida mereni.
 select * -- aktualni stav
-from mereni
+from XMIHOL00.mereni
 where id_jedince = 'TYUS0050' or id_jedince = 'REOS045';
 
 call pridat_mereni_XCHOCH08('TYUS0050', to_date('2021-04-26', 'yyyy-mm-dd'), 'včše v pořádku až na zalomený drPek', 165, 1.42);
@@ -1064,7 +1064,7 @@ call pridat_mereni_XCHOCH08('TYUS0050', to_date('2021-04-27', 'yyyy-mm-dd'), 'dr
 call pridat_mereni_XCHOCH08('REOS045', to_date('2021-4-26', 'yyyy-mm-dd'), 'odřená ploutev', 23, 0.2);
 
 select * -- stav po pridani mereni
-from mereni
+from XMIHOL00.mereni
 where id_jedince = 'TYUS0050' or id_jedince = 'REOS045';
 
 -- pote chce pridat mereni k jedinci, ke kteremu nema prava -> chyba
@@ -1074,7 +1074,7 @@ call pridat_mereni_XCHOCH08('HOSK1489', to_date('2021-05-01', 'yyyy-mm-dd'), 'v�
 call upravit_mereni_XCHOCH08(14, 'TYUS0050', to_date('2021-04-26', 'yyyy-mm-dd'), 'vše v pořádku až na zalomený drápek', 165, 1.42);
 
 select * -- stav po oprave
-from mereni
+from XMIHOL00.mereni
 where id_jedince = 'TYUS0050';
 
 -- a pokusi se upravit i mereni u jedince, ke kteremu nema pristup -> chyba
