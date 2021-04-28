@@ -376,6 +376,9 @@ BEGIN
     insert into osetrovatel_mereni values (9106077256, mereni_record.id_jedince, mereni_record.id);
 END;
 /
+
+-- Select prikazy byly pro ucely 4. casti projektu skryty, v pripade potreby odstranit viceradkovy komentar.
+/*
 ----------------------------------------------------------
 -- Patrani: Uhynuli jedinci
 
@@ -602,6 +605,8 @@ join osoba on osoba.id = zamestnanec.id
 where exists (select *
               from navstevnik
               where zamestnanec.id = navstevnik.id);
+
+*/
 
 ------------------------ 4. faze ------------------------
 -- Triggery a procedury
