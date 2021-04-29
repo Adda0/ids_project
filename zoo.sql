@@ -747,6 +747,8 @@ from zamestnanec;
 -- konec procedury zmena_uctu
 
 -- explain plan a index pro vyhledavani v tabulce osoba a jedinec
+
+select * from table(DBMS_XPLAN.display);
 delete from PLAN_TABLE;
 
 explain plan for
@@ -762,6 +764,8 @@ from PLAN_TABLE
 order by PLAN_TABLE.PLAN_ID;
 
 -- prvni urychleni - pouzitim indexu pro jmeno osoby
+select * from table(DBMS_XPLAN.display);
+
 create index osoba_jmeno_index
 on osoba (jmeno);
 
@@ -776,6 +780,8 @@ explain plan for
 select *
 from PLAN_TABLE
 order by PLAN_TABLE.PLAN_ID;
+
+select * from table(DBMS_XPLAN.display);
 
 -- druhe urychleni - pouziti ID u jedincu misto jmen, coz vede na pouziti indexu primarniho klice
 explain plan for
@@ -801,8 +807,9 @@ explain plan for
 select *
 from PLAN_TABLE
 order by PLAN_TABLE.PLAN_ID;
+
+select * from table(DBMS_XPLAN.display);
 -- konec explain plan a indexu
-/
 
 -- osetrovatel muze zadat nove mereni
 create or replace procedure zadat_mereni(
