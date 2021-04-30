@@ -376,6 +376,9 @@ BEGIN
     insert into osetrovatel_mereni values (9106077256, mereni_record.id_jedince, mereni_record.id);
 END;
 /
+
+-- Select prikazy byly pro ucely 4. casti projektu skryty, v pripade potreby odstranit viceradkovy komentar.
+/*
 ----------------------------------------------------------
 -- Patrani: Uhynuli jedinci
 
@@ -603,6 +606,8 @@ where exists (select *
               from navstevnik
               where zamestnanec.id = navstevnik.id);
 
+*/
+
 ------------------------ 4. faze ------------------------
 -- Triggery a procedury
 
@@ -742,6 +747,8 @@ from zamestnanec;
 -- konec procedury zmena_uctu
 
 -- explain plan a index pro vyhledavani v tabulce osoba a jedinec
+
+select * from table(DBMS_XPLAN.display);
 delete from PLAN_TABLE;
 
 explain plan for
@@ -757,6 +764,8 @@ from PLAN_TABLE
 order by PLAN_TABLE.PLAN_ID;
 
 -- prvni urychleni - pouzitim indexu pro jmeno osoby
+select * from table(DBMS_XPLAN.display);
+
 create index osoba_jmeno_index
 on osoba (jmeno);
 
@@ -771,6 +780,8 @@ explain plan for
 select *
 from PLAN_TABLE
 order by PLAN_TABLE.PLAN_ID;
+
+select * from table(DBMS_XPLAN.display);
 
 -- druhe urychleni - pouziti ID u jedincu misto jmen, coz vede na pouziti indexu primarniho klice
 explain plan for
@@ -796,8 +807,9 @@ explain plan for
 select *
 from PLAN_TABLE
 order by PLAN_TABLE.PLAN_ID;
+
+select * from table(DBMS_XPLAN.display);
 -- konec explain plan a indexu
-/
 
 -- osetrovatel muze zadat nove mereni
 create or replace procedure zadat_mereni(
