@@ -1064,7 +1064,7 @@ create table poznamky_XCHOCH08 (
 
 -- a pridelena prava k teto tabulce
 grant select, insert, update, delete, references, alter, index on XMIHOL00.poznamky_XCHOCH08 to XCHOCH08;
--- nebo take lze prikaz zkratit na pomoci all
+-- nebo take lze prikaz zkratit pomoci 'grant all'
 grant all on XMIHOL00.poznamky_XCHOCH08 to XCHOCH08;
 
 -- pouziti databaze osetrovatelem XCHOCH08
@@ -1102,4 +1102,3 @@ where id_jedince = 'TYUS0050';
 
 -- a pokusi se upravit i mereni u jedince, ke kteremu nema pristup -> chyba
 call upravit_mereni_XCHOCH08(9, 'PLRU0003', to_date('2021-04-26', 'yyyy-mm-dd'), 'upraveny stav', 165, 1.42);
-
