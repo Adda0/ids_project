@@ -1093,23 +1093,23 @@ select * -- aktualni stav
 from XMIHOL00.mereni
 where id_jedince = 'TYUS0050' or id_jedince = 'REOS045';
 
-call pridat_mereni_XCHOCH08('TYUS0050', to_date('2021-04-26', 'yyyy-mm-dd'), 'včše v pořádku až na zalomený drPek', 165, 1.42);
-call pridat_mereni_XCHOCH08('TYUS0050', to_date('2021-04-27', 'yyyy-mm-dd'), 'drápek se zlepšuje', 165, 1.42);
-call pridat_mereni_XCHOCH08('REOS045', to_date('2021-4-26', 'yyyy-mm-dd'), 'odřená ploutev', 23, 0.2);
+call XMIHOL00.pridat_mereni_XCHOCH08('TYUS0050', to_date('2021-04-26', 'yyyy-mm-dd'), 'včše v pořádku až na zalomený drPek', 165, 1.42);
+call XMIHOL00.pridat_mereni_XCHOCH08('TYUS0050', to_date('2021-04-27', 'yyyy-mm-dd'), 'drápek se zlepšuje', 165, 1.42);
+call XMIHOL00.pridat_mereni_XCHOCH08('REOS045', to_date('2021-4-26', 'yyyy-mm-dd'), 'odřená ploutev', 23, 0.2);
 
 select * -- stav po pridani mereni
 from XMIHOL00.mereni
 where id_jedince = 'TYUS0050' or id_jedince = 'REOS045';
 
 -- pote chce pridat mereni k jedinci, ke kteremu nema prava -> chyba
-call pridat_mereni_XCHOCH08('HOSK1489', to_date('2021-05-01', 'yyyy-mm-dd'), 'vše v pořádku', 0.32, 0.16);
+call XMIHOL00.pridat_mereni_XCHOCH08('HOSK1489', to_date('2021-05-01', 'yyyy-mm-dd'), 'vše v pořádku', 0.32, 0.16);
 
 -- vsimne si ze u jedince s id TYUS0050 udelal chybu v popisu mereni a opravi ji
-call upravit_mereni_XCHOCH08(14, 'TYUS0050', to_date('2021-04-26', 'yyyy-mm-dd'), 'vše v pořádku až na zalomený drápek', 165, 1.42);
+call XMIHOL00.upravit_mereni_XCHOCH08(14, 'TYUS0050', to_date('2021-04-26', 'yyyy-mm-dd'), 'vše v pořádku až na zalomený drápek', 165, 1.42);
 
 select * -- stav po oprave
 from XMIHOL00.mereni
 where id_jedince = 'TYUS0050';
 
 -- a pokusi se upravit i mereni u jedince, ke kteremu nema pristup -> chyba
-call upravit_mereni_XCHOCH08(9, 'PLRU0003', to_date('2021-04-26', 'yyyy-mm-dd'), 'upraveny stav', 165, 1.42);
+call XMIHOL00.upravit_mereni_XCHOCH08(9, 'PLRU0003', to_date('2021-04-26', 'yyyy-mm-dd'), 'upraveny stav', 165, 1.42);
