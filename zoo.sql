@@ -752,9 +752,6 @@ from zamestnanec;
 
 -- explain plan a index pro vyhledavani v tabulce osoba a jedinec
 
-select * from table(DBMS_XPLAN.display);
-delete from PLAN_TABLE;
-
 -- bez indexu
 explain plan for
     select jedinec.id, jedinec.jmeno, count(*) as pocet_mereni
@@ -764,9 +761,6 @@ explain plan for
               mereni.id_jedince = jedinec.id and osetrovatel_mereni.mereni_id = mereni.id
         group by jedinec.id, jedinec.jmeno;
 
-select *
-from PLAN_TABLE
-order by PLAN_TABLE.PLAN_ID;
 
 -- prvni urychleni - pouzitim indexu pro jmeno osoby
 select * from table(DBMS_XPLAN.display);
@@ -782,10 +776,6 @@ explain plan for
               mereni.id_jedince = jedinec.id and osetrovatel_mereni.mereni_id = mereni.id
         group by jedinec.id, jedinec.jmeno;
 
-select *
-from PLAN_TABLE
-order by PLAN_TABLE.PLAN_ID;
-
 select * from table(DBMS_XPLAN.display);
 
 -- druhe urychleni - pouziti ID u jedincu misto jmen, coz vede na pouziti indexu primarniho klice
@@ -797,9 +787,7 @@ explain plan for
               mereni.id_jedince = jedinec.id and osetrovatel_mereni.mereni_id = mereni.id
         group by jedinec.id, jedinec.jmeno;
 
-select *
-from PLAN_TABLE
-order by PLAN_TABLE.PLAN_ID;
+select * from table(DBMS_XPLAN.display);
 
 -- druhe urychleni - pouziti indexu i pro jmeno jedince
 create index jedinec_jmeno_index
@@ -813,9 +801,7 @@ explain plan for
               mereni.id_jedince = jedinec.id and osetrovatel_mereni.mereni_id = mereni.id
         group by jedinec.id, jedinec.jmeno;
 
-select *
-from PLAN_TABLE
-order by PLAN_TABLE.PLAN_ID;
+select * from table(DBMS_XPLAN.display);
 
 -- zakaz pouziti kartezskeho soucinu pro spojeni tabulek
 alter session set "_optimizer_mjc_enabled" = false;
@@ -829,13 +815,11 @@ explain plan for
               mereni.id_jedince = jedinec.id and osetrovatel_mereni.mereni_id = mereni.id
         group by jedinec.id, jedinec.jmeno;
 
-select *
-from PLAN_TABLE
-order by PLAN_TABLE.PLAN_ID;
+
+select * from table(DBMS_XPLAN.display);
 
 alter session set "_optimizer_mjc_enabled" = true;
 alter session set "_optimizer_cartesian_enabled" = true;
-select * from table(DBMS_XPLAN.display);
 -- konec explain plan a indexu
 
 -- osetrovatel muze zadat nove mereni
@@ -847,8 +831,6 @@ create or replace procedure zadat_mereni(
     hm in mereni.hmotnost%type,
     vy in mereni.vyska%type
 ) is
-  check_constraint_exception exception;
-  pragma exception_init(check_constraint_exception, -1); --TODO
 begin
     declare
         new_id mereni.id%TYPE;
